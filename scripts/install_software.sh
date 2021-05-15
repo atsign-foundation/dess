@@ -11,4 +11,9 @@ sudo apt -y install hashalot
 # and then install docker-compose as well
 sudo apt -y install docker.io
 sudo apt -y install docker-compose
-
+tput setaf 1
+echo Software Installed
+tput setaf 2
+echo Next step is to setup the atsign user, run
+echo scripts/atsign.sh
+tput setaf 9
