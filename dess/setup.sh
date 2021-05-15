@@ -14,5 +14,6 @@ mkdir ~/atsign/$ATSIGN
 curl -L -o  /etc/letsencrypt/live/$ATSIGN/cacert.pem https://curl.se/ca/cacert.pem
 # Put the restart script in place
 cp ./restart.sh  ~/atsign/etc/renewal-hooks/deploy
+rm ./restart.sh
 # Finally get the certificate in place
 docker-compose up cert

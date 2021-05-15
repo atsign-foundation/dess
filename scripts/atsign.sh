@@ -13,6 +13,7 @@ tput setaf 9
 sudo -u atsign cp dess/.env ~atsign/dess/
 sudo -u atsign cp dess/docker-compose.yaml ~atsign/dess/
 sudo -u atsign cp dess/setup.sh ~atsign/dess/
+sudo -u atsign cp dess/restart.sh ~atsign/dess/
 tput setaf 2
 echo "Allowing atsign to run docker containers"
 tput setaf 9
