@@ -27,7 +27,7 @@ echo "."
 sleep 1
 echo "."
 sleep 1
-echo "If your saw hello-world run you are ready for the next step"
+echo If your saw "Hello from Docker!" run you are ready for the next step
 tput setaf 2
 echo "editing the config files for your secondary"
 echo "start by switching user to atsign, with the following command"
