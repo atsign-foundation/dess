@@ -11,3 +11,4 @@ sudo apt -y install hashalot
 # and then install docker-compose as well
 sudo apt -y install docker.io
 sudo apt -y install docker-compose
+

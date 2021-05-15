@@ -26,3 +26,4 @@ echo "nano .env"
 echo "Once that is complete get some certificates with"
 echo "docker-compose up cert"
 
+
