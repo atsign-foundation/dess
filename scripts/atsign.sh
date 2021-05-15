@@ -31,7 +31,7 @@ echo If your saw "Hello from Docker!" run you are ready for the next step
 tput setaf 2
 echo "editing the config files for your secondary"
 echo "start by switching user to atsign, with the following command"
-echo "sudo -s -u atsign"
+echo "sudo su - atsign"
 echo "The change directory to dess and edit .env"
 echo "cd dess"
 echo "nano .env"
