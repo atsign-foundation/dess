@@ -1,7 +1,7 @@
 #!/bin/bash
 # Source the environment
 source .env
-if [[ "${ATSIGN}" == "@sign" ]]
+if [[ "${ATSIGN}" == "<@sign>" ]]
         then
         tput setaf 1
         echo Please edit the .env file before running setup.sh
