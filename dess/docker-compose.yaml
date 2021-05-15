@@ -1,0 +1,34 @@
+version: "3.3"
+
+services:
+  secondary:
+    image: cconstab/secondary:prod
+    restart: unless-stopped
+    command: "-a ${ATSIGN} -p ${PORT} -s ${SECRET}"
+    ports:
+      - $PORT:$PORT
+    volumes:
+      - ~/atsign/etc/live/${DOMAIN}:/atsign/certs
+      - ~/atsign/etc/archive/${DOMAIN}:/archive/${DOMAIN}
+      - ~/atsign/${ATSIGN}:/atsign/storage
+
+  cert:
+    image: cconstab/mycert:prod
+    volumes:
+      - ~/atsign/etc:/etc/letsencrypt
+      - ~/atsign/var:/var/lib/letsencrypt
+      - ~/atsign/logs:/var/log/letsencrypt
+    ports:
+      - "80:8080"
+    command:  certonly  --http-01-port 8080 --logs-dir /var/log/letsencrypt --standalone --domains ${DOMAIN} --non-interactive --agree-tos -m ${EMAIL}
+
+  renew:
+    image: cconstab/mycert:prod
+    volumes:
+      - ~/atsign/etc:/etc/letsencrypt
+      - ~/atsign/var:/var/lib/letsencrypt
+      - ~/atsign/logs:/var/log/letsencrypt
+    ports:
+      - "80:8080"
+    command:  renew --http-01-port 8080 --force-renew --dry-run
+
