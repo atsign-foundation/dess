@@ -13,7 +13,7 @@ services:
       - ~/atsign/${ATSIGN}:/atsign/storage
 
   cert:
-    image: cconstab/mycert:prod
+    image: certbot/certbot
     volumes:
       - ~/atsign/etc:/etc/letsencrypt
       - ~/atsign/var:/var/lib/letsencrypt
@@ -23,7 +23,7 @@ services:
     command:  certonly  --http-01-port 8080 --logs-dir /var/log/letsencrypt --standalone --domains ${DOMAIN} --non-interactive --agree-tos -m ${EMAIL}
 
   renew:
-    image: cconstab/mycert:prod
+    image: certbot/certbot
     volumes:
       - ~/atsign/etc:/etc/letsencrypt
       - ~/atsign/var:/var/lib/letsencrypt
