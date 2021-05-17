@@ -6,6 +6,7 @@
 # sudo apt upgrade
 sudo apt -y install curl
 sudo apt -y install hashalot
+sudo apt -y install qrencode
 # This is the simple way to install docker for your distribution
 # But if you prefer to run the latest version feel free to do so,
 # and then install docker-compose as well
