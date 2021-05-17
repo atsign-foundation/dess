@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # The following are recommended but
 # let's not cause issues for folks
 # who do not keep up to date!
