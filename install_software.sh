@@ -14,6 +14,14 @@ sudo apt -y install docker-compose
 tput setaf 1
 echo Software Installed
 tput setaf 2
-echo Next step is to setup the atsign user, run
-echo scripts/atsign.sh
-tput setaf 9
+echo Next step is to setup the atsign user
+tput setaf 1
+read -r -p "Would you like to setup the atsign user? [y/N] " response
+if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
+then
+  tput setaf 9
+  scripts/atsign.sh
+else
+  tput setaf 9
+    exit 0
+fi
