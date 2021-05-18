@@ -111,7 +111,7 @@ sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
 # It would be nice to use the @sign for the name but
 # Docker insists on a name that is DNS compliant and so emojis and @ signs are out
 # So instead we can use well known name derived from the DNS host name
-export env DNAME= ${FQDN/.*/}
+DNAME=${FQDN/.*/}
 sudo -u atsign docker stack deploy -c <(docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-swarm.yaml config) $DNAME
      echo Your QR-Code for $ATSIGN
      tput setaf 9
