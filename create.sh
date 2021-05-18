@@ -70,6 +70,7 @@ fi
 # Copy files in from base
 sudo -u atsign mkdir -p ~atsign/dess/$ATSIGN
 sudo -u atsign cp base/* ~atsign/dess/$ATSIGN
+sudo -u atsign cp base/.* ~atsign/dess/$ATSIGN
 # Make the edits to the .env file
 # First comment out everything
 sudo -u atsign sed -i 's/^\([^#].*\)/# \1/g' ~atsign/dess/$ATSIGN/.env
