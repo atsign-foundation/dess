@@ -71,6 +71,8 @@ fi
 sudo -u atsign mkdir -p ~atsign/dess/$ATSIGN
 sudo -u atsign cp  base/.env ~atsign/dess/$ATSIGN
 sudo -u atsign cp  base/docker-compose.yaml ~atsign/dess/$ATSIGN
+# Make the directories in atsign
+sudo -u atsign mkdir ~/atsign/$ATSIGN
 # Make the edits to the .env file
 # First comment out everything
 sudo -u atsign sed -i 's/^\([^#].*\)/# \1/g' ~atsign/dess/$ATSIGN/.env
