@@ -7,5 +7,5 @@ curl -L -o  /etc/letsencrypt/live/$RENEWED_DOMAINS/cacert.pem https://curl.se/ca
 touch /etc/letsencrypt/live/$RENEWED_DOMAINS/restart
 # Get the ownership correct for atsign
 sudo chown -R atsign:atsign ~atsign/atsign/etc/live/$FQDN
-sudo chown -R atsign:atsign ~atsign/atsign/etc/archive/live/$FQDN
+sudo chown -R atsign:atsign ~atsign/atsign/etc/archive/$FQDN
 
