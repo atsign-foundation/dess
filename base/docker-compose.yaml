@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   secondary:
-    image: cconstab/secondary:prod
+    image: cconstab/secondary
     restart: unless-stopped
     command: "-a ${ATSIGN} -p ${PORT} -s ${SECRET}"
     ports:
@@ -30,5 +30,7 @@ services:
       - ~/atsign/logs:/var/log/letsencrypt
     ports:
       - "80:8080"
-    command:  renew --http-01-port 8080 --force-renew --dry-run
+    command:  renew --http-01-port 8080
+    #In case you want to force the issue (dry run first)
+    #command:  renew --http-01-port 8080 --force-renew --dry-run
 
