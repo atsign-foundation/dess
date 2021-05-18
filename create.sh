@@ -75,10 +75,10 @@ sudo -u atsign cp base/.* ~atsign/dess/$ATSIGN
 # First comment out everything
 sudo -u atsign sed -i 's/^\([^#].*\)/# \1/g' ~atsign/dess/$ATSIGN/.env
 # Add the environment variables we need
-echo "ATSIGN=$ATSIGN" >>  ~atsign/dess/$ATSIGN/.env
-echo "DOMAIN=$FQDN" >>  ~atsign/dess/$ATSIGN/.env
-echo "PORT=$PORT" >>  ~atsign/dess/$ATSIGN/.env
-echo "EMAIL=$EMAIL" >>  ~atsign/dess/$ATSIGN/.env
+sudo -u atsign echo "ATSIGN=$ATSIGN" >>  ~atsign/dess/$ATSIGN/.env
+sudo -u atsign echo "DOMAIN=$FQDN" >>  ~atsign/dess/$ATSIGN/.env
+sudo -u atsign echo "PORT=$PORT" >>  ~atsign/dess/$ATSIGN/.env
+sudo -u atsign echo "EMAIL=$EMAIL" >>  ~atsign/dess/$ATSIGN/.env
 
 # Get the certificate for the @sign
     tput setaf 2
