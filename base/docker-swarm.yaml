@@ -5,8 +5,8 @@ services:
    image: cconstab/secondary
    command: "-a ${ATSIGN} -p ${PORT} -s ${SECRET}"
    ports:
-     - target $PORT
-       published:$PORT
+     - target: $PORT
+       published: $PORT
    volumes:
      - ~/atsign/etc/live/${DOMAIN}:/atsign/certs
      - ~/atsign/etc/archive/${DOMAIN}:/archive/${DOMAIN}
