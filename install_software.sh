@@ -21,7 +21,7 @@ tput setaf 1
 echo $USER now has docker permissions, but will need to start a new shell/login to use them
 tput setaf 2
 echo Next step is to setup the atsign user
-tput setaf 1
+tput setaf 9
 read -r -p "Would you like to setup the atsign user? [y/N] " response
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
 then

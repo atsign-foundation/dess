@@ -6,7 +6,8 @@ services:
     restart: unless-stopped
     command: "-a ${ATSIGN} -p ${PORT} -s ${SECRET}"
     ports:
-      - $PORT:$PORT
+      - target $PORT
+         published:$PORT
     volumes:
       - ~/atsign/etc/live/${DOMAIN}:/atsign/certs
       - ~/atsign/etc/archive/${DOMAIN}:/archive/${DOMAIN}
