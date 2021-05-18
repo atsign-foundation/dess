@@ -22,7 +22,6 @@ then
     tput setaf 9
     exit 1
 fi
-
 # Check that we have at least one . in the FQDN
 if [[ ! $FQDN  =~  ^.*\..*$ ]]
 then
@@ -81,6 +80,7 @@ sudo ls -la ~atsign/atsign
 sudo -u atsign sed -i 's/^\([^#].*\)/# \1/g' ~atsign/dess/$ATSIGN/.env
 # Add the environment variables we need
 echo "ATSIGN=$ATSIGN" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
+echo "_ATSIGN=$_ATSIGN" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
 echo "DOMAIN=$FQDN" |sudo -u atsign tee -a ~atsign/dess/$ATSIGN/.env
 echo "PORT=$PORT" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
 echo "EMAIL=$EMAIL" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
@@ -108,7 +108,11 @@ sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
 # We are now ready to start the secondary !
     tput setaf 2
     echo Starting secondary for $ATSIGN at $FQDN on port $PORT
-sudo -u atsign docker stack deploy -c <(docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-swarm.yaml config) $ATSIGN
+# It would be nice to use the @sign for the name but
+# Docker insists on a name that is DNS compliant and so emojis and @ signs are out
+# So instead we can use well known name derived from the DNS host name
+export env DNAME= ${FQDN/.*/}
+sudo -u atsign docker stack deploy -c <(docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-swarm.yaml config) $DNAME
      echo Your QR-Code for $ATSIGN
      tput setaf 9
 qrencode -t ANSIUTF8 "${ATSIGN}:${SECRET}"
