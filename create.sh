@@ -106,11 +106,11 @@ sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
 #
 # We are now ready to start the secondary !
     tput setaf 2
-    echo Starting secondary for $ATSIGN at $FQDN on port $PORT
 # It would be nice to use the @sign for the name but
 # Docker insists on a name that is DNS compliant and so emojis and @ signs are out
 # So instead we can use well known name derived from the DNS host name
 DNAME=${FQDN/.*/}
+    echo Starting secondary for $ATSIGN at $FQDN on port $PORT as $DNAME on Docker
 sudo -u atsign docker stack deploy -c <(docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-swarm.yaml config) $DNAME
      echo Your QR-Code for $ATSIGN
      tput setaf 9
