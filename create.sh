@@ -44,7 +44,7 @@ fi
 # Check if port number is in use
 ss -tulwn | grep LISTEN |grep ":$PORT " > /dev/null 2>&1
 OPEN=$?
-if [[ ! $OPEN -eq 0 ]]
+if [[ $OPEN -eq 0 ]]
 then
     tput setaf 1
     echo "Port number is in use"
