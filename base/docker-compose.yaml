@@ -1,16 +1,19 @@
 version: "3.3"
 
 services:
-  secondary:
-    image: cconstab/secondary
-    restart: unless-stopped
-    command: "-a ${ATSIGN} -p ${PORT} -s ${SECRET}"
-    ports:
-      - $PORT:$PORT
-    volumes:
-      - ~/atsign/etc/live/${DOMAIN}:/atsign/certs
-      - ~/atsign/etc/archive/${DOMAIN}:/archive/${DOMAIN}
-      - ~/atsign/${ATSIGN}:/atsign/storage
+# Some folks might not want to run via swarm
+# In that case it fine to edit the base to use docker-compose
+# Things you loose .. auto-update of secondary, the coolness of swarm mode
+#  secondary:
+#    image: cconstab/secondary
+#    restart: unless-stopped
+#    command: "-a ${ATSIGN} -p ${PORT} -s ${SECRET}"
+#    ports:
+#      - $PORT:$PORT
+#    volumes:
+#      - ~/atsign/etc/live/${DOMAIN}:/atsign/certs
+#      - ~/atsign/etc/archive/${DOMAIN}:/archive/${DOMAIN}
+#      - ~/atsign/${ATSIGN}:/atsign/storage
 
   cert:
     image: certbot/certbot

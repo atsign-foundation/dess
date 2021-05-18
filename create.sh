@@ -110,5 +110,5 @@ sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
 sudo -u atsign docker stack deploy -c <(docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-swarm.yaml config) $ATSIGN
      echo Your QR-Code for $ATSIGN
      tput setaf 9
-qrencode -t "${ATSIGN}:${SECRET}"
+qrencode -t ANSIUTF8 "${ATSIGN}:${SECRET}"
 
