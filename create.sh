@@ -98,7 +98,7 @@ sudo curl -L -o  ~atsign/atsign/etc/live/$FQDN/cacert.pem https://curl.se/ca/cac
 # Put some ownership in place so atsign can read the certs
 sudo chown -R atsign:atsign ~atsign/atsign/$ATSIGN
 sudo chown -R atsign:atsign ~atsign/atsign/etc/live/$FQDN
-sudo chown -R atsign:atsign ~atsign/atsign/archive/live/$FQDN
+sudo chown -R atsign:atsign ~atsign/atsign/etc/archive/live/$FQDN
 # Copy over restart script
 sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
 
