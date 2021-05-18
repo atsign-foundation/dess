@@ -12,6 +12,7 @@ echo "Copying over the base config files"
 tput setaf 9
 sudo -u atsign cp base/.env ~atsign/base/
 sudo -u atsign cp base/docker-compose.yaml ~atsign/base/
+sudo -u atsign cp base/docker-swarm.yaml ~atsign/base/
 sudo -u atsign cp base/setup.sh ~atsign/base/
 #sudo -u atsign cp dess/restart.sh ~atsign/dess/
 tput setaf 2
