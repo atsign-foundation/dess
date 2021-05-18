@@ -88,4 +88,9 @@ echo "SECRET=$SECRET" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
 
     sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-compose.yaml up cert
 
-    echo $?
+# Last task to put in place the restart script and regenerate the ssl root CA file (as root)
+# Root CA
+sudo curl -L -o  ~atsign/atsign/etc/live/$FQDN/cacert.pem https://curl.se/ca/cacert.pem
+# Copy over restart script
+sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
+
