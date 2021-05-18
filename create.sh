@@ -1,5 +1,5 @@
 #!/bin/bash
-if [[ $# -eq 0 || $# -gt 3 ]] ; then
+if [[ $# -eq 0 || $# -gt 4 ]] ; then
     echo 'Usage create.sh <@sign> <fqdn> <port> <email>'
     echo "Example create.sh @bob bob.example.com 6464 bob@example.com"
     exit 0
