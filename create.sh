@@ -79,6 +79,7 @@ echo "ATSIGN=$ATSIGN" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
 echo "DOMAIN=$FQDN" |sudo -u atsign tee -a ~atsign/dess/$ATSIGN/.env
 echo "PORT=$PORT" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
 echo "EMAIL=$EMAIL" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
+echo "SECRET=$SECRET" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
 
 # Get the certificate for the @sign
     tput setaf 2
