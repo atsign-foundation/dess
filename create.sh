@@ -91,7 +91,8 @@ echo "SECRET=$SECRET" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
     echo "Getting certificates"
     tput setaf 9
 
-    sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-compose.yaml up cert
+    sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-compose.yaml down cert
+    sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-compose.yaml up --remove-orphans cert
 
 # Last task to put in place the restart script and regenerate the ssl root CA file (as root)
 # Root CA
