@@ -15,7 +15,10 @@ sudo apt -y install docker-compose
 tput setaf 2
 echo Software Installed
 echo Now enabling swarm mode
- docker swarm init
+sudo docker swarm init
+sudo usermod -aG docker $USER
+tput setaf 1
+echo $USER now has docker permissions, but will need to start a new shell/login to use them
 tput setaf 2
 echo Next step is to setup the atsign user
 tput setaf 1
