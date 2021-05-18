@@ -12,8 +12,10 @@ sudo apt -y install qrencode
 # and then install docker-compose as well
 sudo apt -y install docker.io
 sudo apt -y install docker-compose
-tput setaf 1
+tput setaf 2
 echo Software Installed
+echo Now enabling swarm mode
+ docker swarm init
 tput setaf 2
 echo Next step is to setup the atsign user
 tput setaf 1
