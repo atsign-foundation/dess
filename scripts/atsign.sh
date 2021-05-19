@@ -14,7 +14,6 @@ sudo -u atsign cp base/.env ~atsign/base/
 sudo -u atsign cp base/docker-compose.yaml ~atsign/base/
 sudo -u atsign cp base/docker-swarm.yaml ~atsign/base/
 sudo -u atsign cp base/setup.sh ~atsign/base/
-#sudo -u atsign cp dess/restart.sh ~atsign/dess/
 tput setaf 2
 echo "Allowing atsign to run docker containers"
 tput setaf 9
@@ -34,10 +33,8 @@ then
   echo Next step create.sh
 else
   tput setaf 1
-  echo "Please check docker install"
+  echo "Please check docker install, something went wrong"
   tput setaf 9
     exit 0
 fi
 tput setaf 9
-
-

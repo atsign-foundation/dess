@@ -6,6 +6,6 @@ curl -L -o  /etc/letsencrypt/live/$RENEWED_DOMAINS/cacert.pem https://curl.se/ca
 # It will do this when it has time and is not busy with other work
 touch /etc/letsencrypt/live/$RENEWED_DOMAINS/restart
 # Get the ownership correct for atsign
-sudo chown -R atsign:atsign ~atsign/atsign/etc/live/$FQDN
-sudo chown -R atsign:atsign ~atsign/atsign/etc/archive/$FQDN
+sudo chown -R atsign:atsign ~atsign/atsign/etc/live/$RENEWED_DOMAINS
+sudo chown -R atsign:atsign ~atsign/atsign/etc/archive/$RENEWED_DOMAINS
 
