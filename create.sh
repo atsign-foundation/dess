@@ -1,7 +1,7 @@
 #!/bin/bash
-if [[ $# -eq 0 || $# -gt 4 ]] ; then
-    echo 'Usage create.sh <@sign> <fqdn> <port> <email>'
-    echo "Example create.sh @bob bob.example.com 6464 bob@example.com"
+if [[ $# -eq 0 || $# -gt 5 ]] ; then
+    echo 'Usage create.sh <@sign> <fqdn> <port> <email>i <service>'
+    echo "Example create.sh @bob bob.example.com 6464 bob@example.com bob"
     exit 0
 fi
 
@@ -9,6 +9,7 @@ export env ATSIGN=$1
 export env FQDN=$2
 export env PORT=$3
 export env EMAIL=$4
+export env SERVICE=$5
 
 # Let's make a secret whilst we are here !
 # hashalot should have been installed by now
@@ -60,9 +61,18 @@ then
     exit 1
 fi
 
+# Check to make sure we have a valid email
+if [[ ! "$SERVICE" =~ ^(?![0-9]+$)(?!-)[a-zA-Z0-9-]{,63}(?<!-)$ ]]
+then
+    tput setaf 1
+    echo "Invalid service name must comply with DNS for docker service name"
+    tput setaf 9
+    exit 1
+fi
+
 # Confirm arguments look valid
     tput setaf 2
-    echo "Creating $ATSIGN with $FQDN:$PORT with email $EMAIL"
+    echo "Creating $ATSIGN with $FQDN:$PORT with email $EMAIL with docker service name of $SERVICE"
     tput setaf 9
 
 
@@ -106,10 +116,9 @@ sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
 # It would be nice to use the @sign for the name but
 # Docker insists on a name that is DNS compliant and so emojis and @ signs are out
 # So instead we can use well known name derived from the DNS host name
-DNAME=${FQDN/.*/}
     echo Starting secondary for $ATSIGN at $FQDN on port $PORT as $DNAME on Docker
 sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-swarm.yaml config > /tmp/$ATSIGN
-sudo -u atsign docker stack deploy -c /tmp/$ATSIGN $DNAME
+sudo -u atsign docker stack deploy -c /tmp/$ATSIGN $SERVICE
 rm  /tmp/$ATSIGN
      echo Your QR-Code for $ATSIGN
      tput setaf 9
