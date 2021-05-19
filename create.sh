@@ -61,8 +61,8 @@ then
     exit 1
 fi
 
-# Check to make sure we have a valid email
-if [[ ! "$SERVICE" =~ ^(?![0-9]+$)(?!-)[a-zA-Z0-9-]{,63}(?<!-)$ ]]
+# Check to make sure we have a valid service name
+if [[ ! "$SERVICE" =~ ^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9]))$ ]]
 then
     tput setaf 1
     echo "Invalid service name must comply with DNS for docker service name"
