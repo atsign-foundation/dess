@@ -1,4 +1,4 @@
-# Instructions
+# Instructions v0.0.1
 
 ## Preparation
 ### You will need
@@ -11,7 +11,7 @@
 ### What is missing right now
 - We are working on the interface on atsign.com to enter your dns/port for your @sign, this is a blocker for the moment but you can install and test this environment in the meantime
 - The intent is to provide this environment for AMD64/ARM32/ARM64 CPU architectures but 0.0.1 supports only AMD64
-
+- We assume the machine we are installing on has no other software installed. SO carefully examine the scripts if for example you want to install a specific version of docker. Hints are in the scripts on how to do this
 
 ## Getting started
 - Install this repo

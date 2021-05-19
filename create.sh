@@ -68,8 +68,10 @@ fi
 
 # Copy files in from base
 sudo -u atsign mkdir -p ~atsign/dess/$ATSIGN
+sudo -u atsign mkdir -p ~atsign/dess/base
 sudo -u atsign cp  base/.env ~atsign/dess/$ATSIGN
 sudo -u atsign cp  base/docker-compose.yaml ~atsign/dess/$ATSIGN
+sudo -u atsign cp  base/docker-compose.yaml ~atsign/dess/base
 sudo -u atsign cp  base/docker-swarm.yaml ~atsign/dess/$ATSIGN
 # Make the directories in atsign
 sudo -u atsign mkdir -p ~atsign/atsign/$ATSIGN/storage
