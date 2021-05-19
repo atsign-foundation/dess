@@ -72,15 +72,12 @@ sudo -u atsign cp  base/.env ~atsign/dess/$ATSIGN
 sudo -u atsign cp  base/docker-compose.yaml ~atsign/dess/$ATSIGN
 sudo -u atsign cp  base/docker-swarm.yaml ~atsign/dess/$ATSIGN
 # Make the directories in atsign
-sudo ls -la ~atsign/atsign
 sudo -u atsign mkdir -p ~atsign/atsign/$ATSIGN/storage
-sudo ls -la ~atsign/atsign
 # Make the edits to the .env file
 # First comment out everything
 sudo -u atsign sed -i 's/^\([^#].*\)/# \1/g' ~atsign/dess/$ATSIGN/.env
 # Add the environment variables we need
 echo "ATSIGN=$ATSIGN" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
-echo "_ATSIGN=$_ATSIGN" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
 echo "DOMAIN=$FQDN" |sudo -u atsign tee -a ~atsign/dess/$ATSIGN/.env
 echo "PORT=$PORT" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
 echo "EMAIL=$EMAIL" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
