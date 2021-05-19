@@ -111,7 +111,7 @@ sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
 # So instead we can use well known name derived from the DNS host name
 DNAME=${FQDN/.*/}
     echo Starting secondary for $ATSIGN at $FQDN on port $PORT as $DNAME on Docker
-sudo -u atsign docker stack deploy -c <(docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-swarm.yaml config) $DNAME
+sudo -u atsign docker stack deploy -c <(sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-swarm.yaml config) $DNAME
      echo Your QR-Code for $ATSIGN
      tput setaf 9
 qrencode -t ANSIUTF8 "${ATSIGN}:${SECRET}"
