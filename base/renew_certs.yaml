@@ -1,7 +1,7 @@
 version: "3.7"
 
 services:
-  cert:
+  renew:
     image: certbot/certbot
     volumes:
       - ~/atsign/etc:/etc/letsencrypt
@@ -9,5 +9,6 @@ services:
       - ~/atsign/logs:/var/log/letsencrypt
     ports:
       - "80:8080"
-    command:  certonly  --http-01-port 8080 --logs-dir /var/log/letsencrypt --standalone --domains ${DOMAIN} --non-interactive --agree-tos -m ${EMAIL}
-
+    command:  renew --http-01-port 8080
+    #In case you want to force the issue (dry run first)
+    #command:  renew --http-01-port 8080 --force-renew --dry-run

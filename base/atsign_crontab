@@ -1,0 +1,1 @@
+15 3 * * * docker-compose --env-file ~atsign/dess/base/.env -f ~atsign/dess/base/docker-compose.yaml run  --service-ports renew
