@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.7"
 
 services:
 # Some folks might not want to run via swarm

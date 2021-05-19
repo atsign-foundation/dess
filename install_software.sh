@@ -16,6 +16,7 @@ tput setaf 2
 echo Software Installed
 echo Now enabling swarm mode
 sudo docker swarm init
+sudo docker network create -d overlay secondaries
 sudo usermod -aG docker $USER
 tput setaf 1
 echo $USER now has docker permissions, but will need to start a new shell/login to use them

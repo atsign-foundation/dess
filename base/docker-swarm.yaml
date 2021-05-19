@@ -1,13 +1,20 @@
-version: "3.3"
+version: "3.7"
 
 services:
- secondary:
-   image: cconstab/secondary
-   command: "-a ${ATSIGN} -p ${PORT} -s ${SECRET}"
-   ports:
-     - target: $PORT
-       published: $PORT
-   volumes:
-     - ~/atsign/etc/live/${DOMAIN}:/atsign/certs
-     - ~/atsign/etc/archive/${DOMAIN}:/archive/${DOMAIN}
-     - ~/atsign/${ATSIGN}:/atsign/storage
+  secondary:
+    image: cconstab/secondary
+    command: "-a ${ATSIGN} -p ${PORT} -s ${SECRET}"
+    ports:
+      - target: $PORT
+        published: $PORT
+    volumes:
+      - ~/atsign/etc/live/${DOMAIN}:/atsign/certs
+      - ~/atsign/etc/archive/${DOMAIN}:/archive/${DOMAIN}
+      - ~/atsign/${ATSIGN}:/atsign/storage
+    networks:
+      second: {}
+
+networks:
+  second:
+    external: true
+    name: secondaries
