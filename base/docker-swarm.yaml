@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   secondary:
-    image: cconstab/secondary
+    image: atsigncompany/secondary:dess
     command: "-a ${ATSIGN} -p ${PORT} -s ${SECRET}"
     ports:
       - target: $PORT
