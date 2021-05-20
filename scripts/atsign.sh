@@ -2,12 +2,16 @@
 tput setaf 2
 echo "Adding new Linux user atsign"
 tput setaf 9
-sudo adduser -uid 1024 --disabled-password --disabled-login atsign
+sudo adduser -uid 1024 --disabled-password --disabled-login --gecos "atsign, secondaries account, asign.com"  atsign
 tput setaf 2
 echo "Creating some base directories for atsign"
 tput setaf 9
 sudo -u atsign mkdir -p ~atsign/dess ~atsign/base ~atsign/atsign/var ~atsign/atsign/etc ~atsign/atsign/logs
 tput setaf 2
+echo "setting up certbot"
+sudo rm /etc/letsencrypt/*
+sudo rmdir /etc/letsencrypt/
+sudo ln -s ~atsign/atsign/etc /etc/letsencrypt
 echo "Copying over the base config files"
 tput setaf 9
 sudo -u atsign cp base/.env ~atsign/base/

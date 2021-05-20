@@ -99,7 +99,8 @@ sudo -u atsign cp  ~atsign/dess/$ATSIGN/.env ~atsign/base/
     echo "Getting certificates"
     tput setaf 9
 
-     sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-compose.yaml run  --service-ports cert
+#     sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-compose.yaml run  --service-ports cert
+sudo certbot --standalone --domains ${FQDN} --non-interactive --agree-tos -m ${EMAIL}
 
 # Last task to put in place the restart script and regenerate the ssl root CA file (as root)
 # Root CA
