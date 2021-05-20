@@ -22,7 +22,7 @@ sudo -u atsign cp base/docker-swarm.yaml ~atsign/base/
 sudo -u atsign cp base/setup.sh ~atsign/base/
 tput setaf 2
 echo "Setting up crontab to renew certs once a day"
-sudo -u atsign crontab ~atsign/base/atsign_crontab
+#sudo -u atsign crontab ~atsign/base/atsign_crontab
 echo "Allowing atsign to run docker containers"
 tput setaf 9
 sudo usermod -aG docker atsign
