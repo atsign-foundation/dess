@@ -35,7 +35,8 @@ sudo usermod -aG docker atsign
 tput setaf 2
 echo "Checking if atsign can run a docker container"
 sleep 2
-echo "OK let's try"
+echo "OK let's try, after we wait for a few seconds..."
+sleep 5
 tput setaf 9
 sudo -u atsign docker run hello-world
 RESULT=$?
