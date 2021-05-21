@@ -2,7 +2,7 @@ version: "3"
 
 services:
   shepherd:
-    image: mazzolino/shepherd
+    image: mazzolino/shepherd:latest
     environment:
       TZ: 'US/PST'
       SLEEP_TIME: '30m'
