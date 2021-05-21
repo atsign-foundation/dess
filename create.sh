@@ -120,7 +120,6 @@ sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
     echo Starting secondary for $ATSIGN at $FQDN on port $PORT as $DNAME on Docker
 sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-swarm.yaml config | sudo -u atsign tee ~atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null
 sudo -u atsign docker stack deploy -c ~atsign/dess/$ATSIGN/docker-compose.yaml $SERVICE
-rm  /tmp/$ATSIGN
      echo Your QR-Code for $ATSIGN
      tput setaf 9
 qrencode -t ANSIUTF8 "${ATSIGN}:${SECRET}"
