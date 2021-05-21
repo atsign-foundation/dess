@@ -7,7 +7,7 @@ services:
       TZ: 'US/PST'
       SLEEP_TIME: '30m'
       VERBOSE: 'true'
-      FILTER_SERVICES: 'label=com.docker.stack.image=cconstab/secondary'
+      FILTER_SERVICES: 'label=com.docker.stack.image=atsigncompany/secondary'
       IMAGE_AUTOCLEAN_LIMIT: 5
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
