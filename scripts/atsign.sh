@@ -13,7 +13,7 @@ if [[ ! -d ~atsign/atsign/etc ]]
   tput setaf 9
   else
   tput setaf 1
-  echo saved you from destroying letsencrypt by running the script again :-)
+  echo 'saved you from destroying letsencrypt by running the script again :-)'
   tput setaf 9
 fi
 tput setaf 2
