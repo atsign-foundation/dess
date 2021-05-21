@@ -15,14 +15,10 @@ sudo ln -s ~atsign/atsign/etc /etc/letsencrypt
 echo "Copying over the base config files"
 tput setaf 9
 sudo -u atsign cp base/.env ~atsign/base/
-sudo -u atsign cp  base/renew_certs.yaml ~atsign/base
-sudo -u atsign cp  base/atsign_crontab ~atsign/base
-sudo -u atsign cp base/docker-compose.yaml ~atsign/base/
 sudo -u atsign cp base/docker-swarm.yaml ~atsign/base/
 sudo -u atsign cp base/setup.sh ~atsign/base/
 tput setaf 2
 echo "Setting up crontab to renew certs once a day"
-#sudo -u atsign crontab ~atsign/base/atsign_crontab
 echo "Allowing atsign to run docker containers"
 tput setaf 9
 sudo usermod -aG docker atsign
