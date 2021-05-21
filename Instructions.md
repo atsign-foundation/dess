@@ -19,7 +19,7 @@
   sudo apt update
   sudo apt install git
   cd
-  git clone https://github.com/atsign-foundation/dess.git
+  git clone --branch  dess-0.0.1-candidate.01 https://github.com/atsign-foundation/dess.git
   cd dess
   ```
 - Make sure you have root access via sudo for your account
