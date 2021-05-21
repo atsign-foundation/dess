@@ -79,7 +79,6 @@ fi
 # Copy files in from base
 sudo -u atsign mkdir -p ~atsign/dess/$ATSIGN
 sudo -u atsign cp  base/.env ~atsign/dess/$ATSIGN
-sudo -u atsign cp  base/docker-compose.yaml ~atsign/dess/$ATSIGN
 sudo -u atsign cp  base/docker-swarm.yaml ~atsign/dess/$ATSIGN
 # Make the directories in atsign
 sudo -u atsign mkdir -p ~atsign/atsign/$ATSIGN/storage
@@ -99,7 +98,8 @@ sudo -u atsign cp  ~atsign/dess/$ATSIGN/.env ~atsign/base/
     echo "Getting certificates"
     tput setaf 9
 
-     sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-compose.yaml run  --service-ports cert
+#     sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-compose.yaml run  --service-ports cert
+sudo certbot certonly --standalone --domains ${FQDN} --non-interactive --agree-tos -m ${EMAIL}
 
 # Last task to put in place the restart script and regenerate the ssl root CA file (as root)
 # Root CA
@@ -115,12 +115,11 @@ sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
 # We are now ready to start the secondary !
     tput setaf 2
 # It would be nice to use the @sign for the name but
-# Docker insists on a name that is DNS compliant and so emojis and @ signs are out
-# So instead we can use well known name derived from the DNS host name
+# Docker insists on a name that is DNS compliant and so emojis and @ signs are out hence the $SERVICE tag
+# we use a neat trick using docker-compose to create the compose file for us.
     echo Starting secondary for $ATSIGN at $FQDN on port $PORT as $DNAME on Docker
-sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-swarm.yaml config > /tmp/$ATSIGN
-sudo -u atsign docker stack deploy -c /tmp/$ATSIGN $SERVICE
-rm  /tmp/$ATSIGN
+sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-swarm.yaml config | sudo -u atsign tee ~atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null
+sudo -u atsign docker stack deploy -c ~atsign/dess/$ATSIGN/docker-compose.yaml $SERVICE
      echo Your QR-Code for $ATSIGN
      tput setaf 9
 qrencode -t ANSIUTF8 "${ATSIGN}:${SECRET}"

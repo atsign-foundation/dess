@@ -1,1 +1,0 @@
-15 3 * * * docker-compose --env-file ~atsign/base/.env -f ~atsign/base/renew_certs.yaml run  --service-ports renew
