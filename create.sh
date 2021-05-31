@@ -1,6 +1,6 @@
 #!/bin/bash
 if [[ $# -eq 0 || $# -gt 5 ]] ; then
-    echo 'Usage create.sh <@sign> <fqdn> <port> <email>i <service>'
+    echo 'Usage create.sh <@sign> <fqdn> <port> <email> <service>'
     echo "Example create.sh @bob bob.example.com 6464 bob@example.com bob"
     exit 0
 fi
