@@ -186,7 +186,7 @@ setup_docker () {
   # setup and deploy the swarm as atsign
   docker swarm init
   docker network create -d overlay secondaries
-  docker stack deploy -c ~atsign/base/shepherd.yaml secondaries
+  docker stack deploy -c /home/atsign/base/shepherd.yaml secondaries
 }
 
 test_atsign_user () {
