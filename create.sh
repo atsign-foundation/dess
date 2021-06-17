@@ -122,8 +122,8 @@ sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
 # Docker insists on a name that is DNS compliant and so emojis and @ signs are out hence the $SERVICE tag
 # we use a neat trick usign docker-compose to create the compose file for us.
     echo Starting secondary for $ATSIGN at $FQDN on port $PORT as $DNAME on Docker
-sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-swarm.yaml config | sudo -u atsign tee ~atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null
-sudo -u atsign docker stack deploy -c ~atsign/dess/$ATSIGN/docker-compose.yaml $SERVICE
+sudo docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-swarm.yaml config | sudo -u atsign tee ~atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null
+sudo docker stack deploy -c ~atsign/dess/$ATSIGN/docker-compose.yaml $SERVICE
      echo Your QR-Code for $ATSIGN
      tput setaf 9
 qrencode -t ANSIUTF8 "${ATSIGN}:${SECRET}"
