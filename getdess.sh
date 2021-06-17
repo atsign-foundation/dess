@@ -64,9 +64,16 @@ pre_install () {
 # Functions below are run as root via do_install
 
 install_dependencies () {
-  # openssl, qrencode, curl
-  # if container
-  # install fuse squashfuse
+  $pkg_man -y update
+  for pkg in $packages; do
+    $pkg_man -y install $pkg
+  done
+  # Container support
+  if [[ $(systemd-detect-virt) -ne 'none' ]]; then
+    for lxc_pkg in $lxc_packages; do
+      $pkg_man -y install $lxc_pkg
+    done
+  fi
 }
 
 install_certbot () {
