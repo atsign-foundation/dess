@@ -81,7 +81,7 @@ install_dependencies () {
     $pkg_man -y install $pkg
   done
   # Container support
-  if [[ $(systemd-detect-virt) -ne 'none' ]]; then
+  if [[ $(systemd-detect-virt) != 'none' ]]; then
     for lxc_pkg in $lxc_packages; do
       $pkg_man -y install $lxc_pkg
     done
@@ -92,7 +92,7 @@ install_certbot () {
   # install snapd
   if [[ "$os_release" == centos ]]; then
     $pkg_man -y install epel-release
-  elif [[ "os_release" == fedora ]]; then
+  elif [[ "$os_release" == fedora ]]; then
     $pkg_man -y install kernel-modules
   fi
   $pkg_man -y install snapd
@@ -191,7 +191,7 @@ test_atsign_user () {
     sh_uc='su atsign --preserve-environment -c'
   fi
   # check if docker works for atsign user
-  sh_uc docker run hello-world
+  "$sh_uc" docker run hello-world
   RESULT=$?
   if [[ $RESULT -eq 0 ]]; then
     echo "Docker setup correctly for atsign user"
