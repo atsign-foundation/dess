@@ -6,7 +6,7 @@ set -m
 # Dess installation
 
 # Dependencies
-# openssl, qrencode
+# openssl, qrencode, curl
 # docker, docker-compose, snapd
 # certbot (via snap)
 
