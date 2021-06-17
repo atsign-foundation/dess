@@ -101,7 +101,16 @@ install_certbot () {
 }
 
 install_docker () {
-  # docker, docker compose
+  # docker
+  if ! command_exists docker; then
+    curl -fsSL https://get.docker.com -o get-docker.sh
+    sh get-docker.sh
+  fi
+
+  # docker-compose
+  curl -fsSL "$compose_url" -o /usr/local/bin/docker-compose
+  chmod +x /usr/local/bin/docker-compose
+  ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 }
 
 setup_atsign_user () {
