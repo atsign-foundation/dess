@@ -164,7 +164,12 @@ setup_atsign_user () {
 
 setup_docker () {
   # give atsign user docker permissions
+  usermod -aG docker atsign
+
   # setup and deploy the swarm as atsign
+  docker swarm init
+  docker network create -d overlay secondaries
+  docker stack deploy -c base/shepherd.yaml secondaries
 }
 
 test_atsign_user () {
