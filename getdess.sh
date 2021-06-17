@@ -26,6 +26,15 @@ packages="curl openssl qrencode"
 # Docker compose link
 compose_url="https://github.com/docker/compose/releases/download/1.29/docker-compose-$(uname -s)-$(uname -m)"
 
+# Atsign user info
+user_info="atsign, secondaries account, atsign.com"
+
+# Atsign directories
+atsign_dirs="~atsign/dess ~atsign/base ~atsign/atsign/var ~atsign/atsign/etc ~atsign/atsign/logs"
+
+# Repository files
+repo_url=""
+atsign_files="base/.env base/docker-swarm.yaml base/setup.sh base/shepherd.yaml"
 
 command_exists () {
   command -v "$@" > /dev/null 2>&1
@@ -202,6 +211,11 @@ do_install () {
     os_release=$os_release
     pkg_man=$pkg_man
     compose_url=$compose_url
+    user_info=$user_info
+    atsign_dirs=$atsign_dirs
+    repo_url=$repo_url
+    atsign_files=$atsign_files
+    original_user=$USER
     $FUNC;
     install_dependencies
     install_certbot
