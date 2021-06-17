@@ -81,7 +81,7 @@ sudo mkdir -p ~atsign/dess/$ATSIGN
 sudo cp base/.env ~atsign/dess/$ATSIGN
 sudo cp base/docker-swarm.yaml ~atsign/dess/$ATSIGN
 sudo chmod 664 ~atsign/dess/$ATSIGN/.env
-sudo chown atsing:atsign ~atsign/dess/$ATSIGN/.env
+sudo chown atsign:atsign ~atsign/dess/$ATSIGN/.env
 sudo chown atsign:atsign ~atsign/dess/$ATSIGN/docker-swarm.yaml
 # Make the directories in atsign
 sudo -u atsign mkdir -p ~atsign/atsign/$ATSIGN/storage
@@ -120,7 +120,7 @@ sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
     tput setaf 2
 # It would be nice to use the @sign for the name but
 # Docker insists on a name that is DNS compliant and so emojis and @ signs are out hence the $SERVICE tag
-# we use a neat trick using docker-compose to create the compose file for us.
+# we use a neat trick usign docker-compose to create the compose file for us.
     echo Starting secondary for $ATSIGN at $FQDN on port $PORT as $DNAME on Docker
 sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-swarm.yaml config | sudo -u atsign tee ~atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null
 sudo -u atsign docker stack deploy -c ~atsign/dess/$ATSIGN/docker-compose.yaml $SERVICE
