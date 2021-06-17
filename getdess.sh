@@ -37,6 +37,9 @@ repo_url=""
 atsign_files="base/.env base/docker-swarm.yaml base/setup.sh base/shepherd.yaml"
 dess_scripts="create reshowqr"
 
+# Original user
+original_user=$USER
+
 command_exists () {
   command -v "$@" > /dev/null 2>&1
 }
@@ -176,6 +179,9 @@ setup_docker () {
   # give atsign user docker permissions
   usermod -aG docker atsign
 
+  # give user docker permissions
+  usermod -aG docker "$original_user"
+
   # setup and deploy the swarm as atsign
   docker swarm init
   docker network create -d overlay secondaries
@@ -238,7 +244,7 @@ do_install () {
     repo_url=$repo_url
     atsign_files=$atsign_files
     dess_scripts=$dess_scripts
-    original_user=$USER
+    original_user=$original_user
     $FUNC;
     install_dependencies
     install_certbot
