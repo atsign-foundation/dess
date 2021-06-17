@@ -23,9 +23,12 @@ sudo -u atsign mkdir -p ~atsign/dess ~atsign/base ~atsign/atsign/var ~atsign/ats
 tput setaf 2
 echo "Copying over the base config files"
 tput setaf 9
-sudo -u atsign cp base/.env ~atsign/base/
-sudo -u atsign cp base/docker-swarm.yaml ~atsign/base/
-sudo -u atsign cp base/setup.sh ~atsign/base/
+sudo cp base/.env ~atsign/base/
+sudo cp base/docker-swarm.yaml ~atsign/base/
+sudo cp base/setup.sh ~atsign/base/
+sudo chmod 664 ~atsign/base/.env
+sudo chmod 664 ~atsign/base/docker-swarm.yaml
+sudo chmod 664 ~atsign/base/setup.sh
 tput setaf 2
 echo "Setting up crontab to renew certs once a day"
 #sudo -u atsign crontab ~atsign/base/atsign_crontab
