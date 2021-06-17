@@ -33,7 +33,7 @@ user_info="atsign, secondaries account, atsign.com"
 atsign_dirs="~atsign/dess ~atsign/base ~atsign/atsign/var ~atsign/atsign/etc ~atsign/atsign/logs"
 
 # Repository files
-repo_url=""
+repo_url="https://raw.githubusercontent.com/XavierChanth/dess/curl-testing/getdess.sh"
 atsign_files="base/.env base/docker-swarm.yaml base/setup.sh base/shepherd.yaml"
 dess_scripts="create reshowqr"
 
@@ -217,8 +217,35 @@ get_dess_scripts () {
   done
 }
 
+functions="
+  command_exists
+  pre_install
+  install_dependencies
+  install_certbot
+  install_docker
+  mkdir_atsign
+  curl_atsign_file
+  setup_atsign_user
+  setup_docker
+  test_atsign_user
+  get_dess_scripts
+  "
+
+export_functions () {
+  for func in $functions; do
+    export -f "${func?}"
+  done
+}
+
+unset_functions () {
+  for func in $functions; do
+    unset "$func"
+  done
+}
+
 do_install () {
   pre_install
+  export_functions
 
   sh_c=''
   if [[ $EUID -ne 0 ]]; then
@@ -233,7 +260,6 @@ do_install () {
     fi
   fi
 
-  FUNC=$(declare -f)
   $sh_c "
     install_dependencies
     install_certbot
@@ -243,6 +269,8 @@ do_install () {
     test_atsign_user
     get_dess_scripts
   ";
+
+  unset_functions
 }
 
 do_install
