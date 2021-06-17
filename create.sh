@@ -77,9 +77,11 @@ fi
 
 
 # Copy files in from base
-sudo -u atsign mkdir -p ~atsign/dess/$ATSIGN
-sudo -u atsign cp  base/.env ~atsign/dess/$ATSIGN
-sudo -u atsign cp  base/docker-swarm.yaml ~atsign/dess/$ATSIGN
+sudo mkdir -p ~atsign/dess/$ATSIGN
+sudo cp base/.env ~atsign/dess/$ATSIGN
+sudo cp base/docker-swarm.yaml ~atsign/dess/$ATSIGN
+chmod 664 ~atsign/dess/$ATSIGN/.env
+chmod 664 ~atsign/dess/$ATSIGN/docker-swarm.yaml
 # Make the directories in atsign
 sudo -u atsign mkdir -p ~atsign/atsign/$ATSIGN/storage
 # Make the edits to the .env file
