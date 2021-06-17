@@ -23,6 +23,8 @@ redhat_releases='centos fedora'
 lxc_packages="fuse squashfuse"
 packages="curl openssl qrencode"
 
+# Docker compose link
+compose_url="https://github.com/docker/compose/releases/download/1.29/docker-compose-$(uname -s)-$(uname -m)"
 
 
 command_exists () {
@@ -155,6 +157,7 @@ do_install () {
   $sh_c "
     os_release=$os_release
     pkg_man=$pkg_man
+    compose_url=$compose_url
     $FUNC;
     install_dependencies
     install_certbot
