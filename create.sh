@@ -80,8 +80,9 @@ fi
 sudo mkdir -p ~atsign/dess/$ATSIGN
 sudo cp base/.env ~atsign/dess/$ATSIGN
 sudo cp base/docker-swarm.yaml ~atsign/dess/$ATSIGN
-chmod 664 ~atsign/dess/$ATSIGN/.env
-chmod 664 ~atsign/dess/$ATSIGN/docker-swarm.yaml
+sudo chmod 664 ~atsign/dess/$ATSIGN/.env
+sudo chown atsing:atsign ~atsign/dess/$ATSIGN/.env
+sudo chown atsign:atsign ~atsign/dess/$ATSIGN/docker-swarm.yaml
 # Make the directories in atsign
 sudo -u atsign mkdir -p ~atsign/atsign/$ATSIGN/storage
 # Make the edits to the .env file
@@ -94,7 +95,8 @@ echo "PORT=$PORT" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
 echo "EMAIL=$EMAIL" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
 echo "SECRET=$SECRET" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
 # copy over the .env file to base so we can renew the certs with an up to date EMAIL
-sudo -u atsign cp  ~atsign/dess/$ATSIGN/.env ~atsign/base/
+sudo cp ~atsign/dess/$ATSIGN/.env ~atsign/base/
+sudo chmod 664 ~atsign/base/.env
 # Get the certificate for the @sign
     tput setaf 2
     echo "Getting certificates"

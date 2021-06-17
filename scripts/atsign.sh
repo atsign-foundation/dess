@@ -29,6 +29,9 @@ sudo cp base/setup.sh ~atsign/base/
 sudo chmod 664 ~atsign/base/.env
 sudo chmod 664 ~atsign/base/docker-swarm.yaml
 sudo chmod 664 ~atsign/base/setup.sh
+sudo chown atsign:atsign ~atsign/base/.env
+sudo chown atsign:atsign ~atsign/base/docker-swarm.yaml
+sudo chown atsign:atsign ~atsign/base/setup.sh
 tput setaf 2
 echo "Setting up crontab to renew certs once a day"
 #sudo -u atsign crontab ~atsign/base/atsign_crontab
