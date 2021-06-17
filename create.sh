@@ -13,7 +13,7 @@ export env SERVICE=$5
 
 # Let's make a secret whilst we are here !
 # hashalot should have been installed by now
-export env SECRET=`head -30 /dev/urandom |hashalot -x sha512`
+export env SECRET=`head -30 /dev/urandom |openssl -x sha512`
 
 # Check that we have an @ in the @sign
 if [[ ! $ATSIGN  =~ ^@.*$ ]]
