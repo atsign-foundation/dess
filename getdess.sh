@@ -134,7 +134,7 @@ mkdir_atsign () {
 }
 
 curl_atsign_file () {
-  curl -fsSL "$repo_url"/"$1" ~atsign/"$1"
+  curl -fsSL "$repo_url"/"$1" -o ~atsign/"$1"
   chown atsign ~atsign/"$1"
 }
 
@@ -211,7 +211,7 @@ get_dess_scripts () {
   # curl create and reshowqr from repo
   # to /usr/local/bin
   for script in $dess_scripts; do
-    curl -fsSL "$repo_url"/"$script".sh /usr/local/bin/dess-"$script"
+    curl -fsSL "$repo_url"/"$script".sh -o /usr/local/bin/dess-"$script"
     chmod +x /usr/local/bin/dess-"$script"
     ln -s /usr/local/bin/dess-"$script" /usr/bin/dess-"$script"
   done
