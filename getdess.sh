@@ -130,11 +130,13 @@ install_docker () {
 
 mkdir_atsign () {
   mkdir -p "$1"
+  echo "making $1"
   chown atsign "$1"
 }
 
 curl_atsign_file () {
   curl -fsSL "$repo_url"/"$1" -o ~atsign/"$1"
+  echo "curling $1"
   chown atsign ~atsign/"$1"
 }
 
