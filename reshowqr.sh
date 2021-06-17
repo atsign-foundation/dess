@@ -9,5 +9,5 @@ then
     echo "Can't find $1, please check for typos."
     exit 2
 fi
-. ~atsign/dess/$1/.env
+. ~atsign/dess/"$1"/.env
 qrencode -t ANSIUTF8 "${ATSIGN}:${SECRET}"
