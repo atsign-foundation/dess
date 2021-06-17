@@ -64,6 +64,9 @@ is pushed. Certificates will be renewed automatically, and crashes or other
 issues will be handled gracefully. The software your secondary uses will be
 the exact same image as The @ Company is using in production.
 
+[Instructions.md](Instructions.md) contains detailed instructions on how to
+install dess and create a secondary server using it.
+
 ## Maintainers
 
 Created by [cconstab](https://github.com/cconstab).
