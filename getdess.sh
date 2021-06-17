@@ -115,15 +115,54 @@ install_docker () {
   ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 }
 
+mkdir_atsign () {
+  mkdir -p "$1"
+  chown atsign "$1"
+}
+
+curl_atsign_file () {
+  curl -fsSL "$repo_url"/"$1" ~atsign/"$1"
+  chown atsign ~atsign/"$1"
+}
+
 setup_atsign_user () {
   # add atsign user
+  if [[ $pkg_man == apt-get ]]; then
+    adduser -uid 1024 --disabled-password --disabled-login --gecos "$user_info" atsign
+  else
+    adduser --uid 1024 --comment "$user_info" atsign
+  fi
+
   # link lets-encrypt folder
+  if [[ ! -d ~atsign/atsign/etc ]]; then
+    tput setaf 2
+    echo "setting up certbot"
+    rm /etc/letsencrypt/*
+    rmdir /etc/letsencrypt/
+    ln -s ~atsign/atsign/etc /etc/letsencrypt
+    tput setaf 9
+  else
+    tput setaf 1
+    echo 'saved you from destroying letsencrypt by running the script again :-)'
+    tput setaf 9
+  fi
+
   # make ~atsign directories
+  tput setaf 2
+  echo "Creating some base directories for atsign"
+  tput setaf 9
+  for directory in $atsign_dirs; do
+    mkdir_atsign "$directory"
+  done
+  tput setaf 2
+
   # curl the base files for atsign
+  for file in $atsign_files; do
+    curl_atsign_file "$file"
+  done
 }
 
 setup_docker () {
-  # curl the base/shepherd.yaml file to atsign
   # give atsign user docker permissions
   # setup and deploy the swarm as atsign
 }
