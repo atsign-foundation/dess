@@ -112,6 +112,7 @@ sudo curl -L -o  ~atsign/atsign/etc/live/$FQDN/cacert.pem https://curl.se/ca/cac
 sudo chown -R atsign:atsign ~atsign/atsign/$ATSIGN
 sudo chown -R atsign:atsign ~atsign/atsign/etc/live/$FQDN
 sudo chown -R atsign:atsign ~atsign/atsign/etc/archive/$FQDN
+sudo chown -R atsign:atsign ~atsign/dess/$ATSIGN
 # Copy over restart script
 sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
 #
@@ -122,6 +123,7 @@ sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
 # Docker insists on a name that is DNS compliant and so emojis and @ signs are out hence the $SERVICE tag
 # we use a neat trick usign docker-compose to create the compose file for us.
     echo Starting secondary for $ATSIGN at $FQDN on port $PORT as $DNAME on Docker
+
 sudo docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-swarm.yaml config | sudo -u atsign tee ~atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null
 sudo docker stack deploy -c ~atsign/dess/$ATSIGN/docker-compose.yaml $SERVICE
      echo Your QR-Code for $ATSIGN
