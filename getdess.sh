@@ -260,15 +260,13 @@ do_install () {
     fi
   fi
 
-  $sh_c "
-    install_dependencies
-    install_certbot
-    install_docker
-    setup_atsign_user
-    setup_docker
-    test_atsign_user
-    get_dess_scripts
-  ";
+  $sh_c install_dependencies
+  $sh_c install_certbot
+  $sh_c install_docker
+  $sh_c setup_atsign_user
+  $sh_c setup_docker
+  $sh_c test_atsign_user
+  $sh_c get_dess_scripts
 
   unset_functions
 }
