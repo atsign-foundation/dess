@@ -87,13 +87,13 @@ sudo chown atsign:atsign ~atsign/dess/$ATSIGN/docker-swarm.yaml
 sudo -u atsign mkdir -p ~atsign/atsign/$ATSIGN/storage
 # Make the edits to the .env file
 # First comment out everything
-sudo -u atsign sed -i 's/^\([^#].*\)/# \1/g' ~atsign/dess/$ATSIGN/.env
+sudo sed -i 's/^\([^#].*\)/# \1/g' ~atsign/dess/$ATSIGN/.env
 # Add the environment variables we need
-echo "ATSIGN=$ATSIGN" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
-echo "DOMAIN=$FQDN" |sudo -u atsign tee -a ~atsign/dess/$ATSIGN/.env
-echo "PORT=$PORT" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
-echo "EMAIL=$EMAIL" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
-echo "SECRET=$SECRET" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
+echo "ATSIGN=$ATSIGN" |sudo tee -a  ~atsign/dess/$ATSIGN/.env
+echo "DOMAIN=$FQDN" |sudo tee -a ~atsign/dess/$ATSIGN/.env
+echo "PORT=$PORT" |sudo tee -a  ~atsign/dess/$ATSIGN/.env
+echo "EMAIL=$EMAIL" |sudo tee -a  ~atsign/dess/$ATSIGN/.env
+echo "SECRET=$SECRET" |sudo tee -a  ~atsign/dess/$ATSIGN/.env
 # copy over the .env file to base so we can renew the certs with an up to date EMAIL
 sudo cp ~atsign/dess/$ATSIGN/.env ~atsign/base/
 sudo chmod 664 ~atsign/base/.env
