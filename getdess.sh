@@ -235,17 +235,6 @@ do_install () {
 
   FUNC=$(declare -f)
   $sh_c "
-    # Just in case the environment isn't preserved correctly
-    os_release=$os_release
-    pkg_man=$pkg_man
-    compose_url=$compose_url
-    user_info=$user_info
-    atsign_dirs=$atsign_dirs
-    repo_url=$repo_url
-    atsign_files=$atsign_files
-    dess_scripts=$dess_scripts
-    original_user=$original_user
-    $FUNC;
     install_dependencies
     install_certbot
     install_docker
