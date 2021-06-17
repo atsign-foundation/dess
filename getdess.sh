@@ -106,7 +106,7 @@ install_certbot () {
   STATUS=1
   while [[ $STATUS -ne 0 ]]; do
     systemctl is-active --quiet snapd.service
-    RESULT=$?
+    STATUS=$?
   done
   # install snap core
   snap install core
