@@ -194,9 +194,9 @@ test_atsign_user () {
   # run as user command
   sh_uc=''
   if command_exists sudo; then
-    sh_uc='sudo -u atsign -E sh -c'
+    sh_uc='sudo -u atsign sh -c'
   elif command_exists su; then
-    sh_uc='su atsign --preserve-environment -c'
+    sh_uc='su atsign -c'
   fi
   # check if docker works for atsign user
   "$sh_uc" docker run hello-world
@@ -205,7 +205,6 @@ test_atsign_user () {
     echo "Docker setup correctly for atsign user"
   else
     echo "Please check docker install, something went wrong"
-    exit 1
   fi
 }
 
