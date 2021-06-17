@@ -33,7 +33,7 @@ user_info="atsign, secondaries account, atsign.com"
 atsign_dirs="~atsign/dess ~atsign/base ~atsign/atsign/var ~atsign/atsign/etc ~atsign/atsign/logs"
 
 # Repository files
-repo_url="https://raw.githubusercontent.com/XavierChanth/dess/curl-testing/getdess.sh"
+repo_url="https://raw.githubusercontent.com/XavierChanth/dess/curl-testing"
 atsign_files="base/.env base/docker-swarm.yaml base/setup.sh base/shepherd.yaml"
 dess_scripts="create reshowqr"
 
