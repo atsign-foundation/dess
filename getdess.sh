@@ -61,6 +61,8 @@ pre_install () {
   echo "Detected package manager: $pkg_man"
 }
 
+# Functions below are run as root via do_install
+
 install_dependencies () {
   # openssl, qrencode, curl
   # if container
