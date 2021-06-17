@@ -13,9 +13,27 @@ set -m
 # Container Dependencies
 # fuse squashfuse
 
+# SCRIPT GLOBALS
 
-preinstall () {
-  # get user's release
+# Supported distros by type
+debian_releases='ubuntu debian'
+redhat_releases='centos fedora'
+
+# Required base packages
+lxc_packages="fuse squashfuse"
+packages="curl openssl qrencode"
+
+
+
+command_exists () {
+  command -v "$@" > /dev/null 2>&1
+}
+
+# Helper function to check if user's release matches the list
+# $1 = list of valid releases
+# $2 = release to check
+is_release () { [[ $1 =~ (^|[[:space:]])$2($|[[:space:]]) ]]; }
+
   # get package manager
   # update package repos
 }
@@ -76,7 +94,7 @@ do_install () {
   fi
 
   FUNC=$(declare -f)
-  $sh_c '
+  $sh_c "
     $FUNC;
     install_dependencies
     install_certbot
@@ -85,7 +103,7 @@ do_install () {
     setup_docker
     test_atsign_user
     get_dess_scripts
-  ';
+  ";
 }
 
 do_install
