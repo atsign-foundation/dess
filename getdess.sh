@@ -34,8 +34,31 @@ command_exists () {
 # $2 = release to check
 is_release () { [[ $1 =~ (^|[[:space:]])$2($|[[:space:]]) ]]; }
 
+pre_install () {
+  # Get the user's release
+  os_release=$(awk -F= '/^NAME/{print $2}' /etc/os-release | sed 's/\"//g' | awk '{print tolower($1)}')
+  if [ -z "$os_release" ]
+  then
+      echo 'Error: Could not detect your distribution.'
+      exit 0
+  fi
+  echo "Detected distribution: $os_release";
+
   # get package manager
-  # update package repos
+  if is_release "$debian_releases" "$os_release"; then
+    pkg_man='apt-get'
+  elif is_release "$redhat_releases" "$os_release"; then
+    #Use dnf if available, fallback to yum on older distros
+    if [[ -n $(command -v 'dnf') ]]; then
+      pkg_man='dnf'
+    else
+      pkg_man='yum'
+    fi
+  else
+    echo 'Your distribution is not supported by this script.'
+    exit 0
+  fi
+  echo "Detected package manager: $pkg_man"
 }
 
 install_dependencies () {
@@ -95,6 +118,8 @@ do_install () {
 
   FUNC=$(declare -f)
   $sh_c "
+    os_release=$os_release
+    pkg_man=$pkg_man
     $FUNC;
     install_dependencies
     install_certbot
