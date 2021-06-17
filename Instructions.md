@@ -1,4 +1,4 @@
-# Instructions v0.0.1
+# Instructions v0.0.1+1
 
 ## Preparation
 ### You will need
@@ -32,8 +32,12 @@
   ./install_software.sh
   ```
 - Create a secondary, using the create.sh script and follow the instructions
-    ```
-    ./create.sh
+  ```
+  ./create.sh
+  ```
+- If you need to see the QR code again for an @sign then run:
+  ```
+  ./reshowqr.sh @youratsign
   ```
 - Sign in to the atsign.com registrar and update your @signs DNS and port number information
 - Fire up an @ app like @buzz or @wavi and pair your device to your secondary
