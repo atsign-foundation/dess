@@ -24,7 +24,7 @@ lxc_packages="fuse squashfuse"
 packages="curl openssl qrencode"
 
 # Docker compose link
-compose_url="https://github.com/docker/compose/releases/download/1.29/docker-compose-$(uname -s)-$(uname -m)"
+compose_url="https://github.com/docker/compose/releases/download/1.29/docker-compose"
 
 # Atsign user info
 user_info="atsign, secondaries account, atsign.com"
@@ -123,7 +123,7 @@ install_docker () {
   fi
 
   # docker-compose
-  curl -fsSL "$compose_url" -o /usr/local/bin/docker-compose
+  curl -fsSL "$compose_url-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   chmod +x /usr/local/bin/docker-compose
   ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 }
@@ -185,7 +185,7 @@ setup_docker () {
   # setup and deploy the swarm as atsign
   docker swarm init
   docker network create -d overlay secondaries
-  docker stack deploy -c base/shepherd.yaml secondaries
+  docker stack deploy -c ~atsign/base/shepherd.yaml secondaries
 }
 
 test_atsign_user () {
