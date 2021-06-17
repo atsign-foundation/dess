@@ -229,6 +229,7 @@ do_install () {
 
   FUNC=$(declare -f)
   $sh_c "
+    # Just in case the environment isn't preserved correctly
     os_release=$os_release
     pkg_man=$pkg_man
     compose_url=$compose_url
@@ -236,6 +237,7 @@ do_install () {
     atsign_dirs=$atsign_dirs
     repo_url=$repo_url
     atsign_files=$atsign_files
+    dess_scripts=$dess_scripts
     original_user=$USER
     $FUNC;
     install_dependencies
