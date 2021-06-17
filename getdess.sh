@@ -169,7 +169,6 @@ setup_atsign_user () {
   for directory in $atsign_dirs; do
     mkdir_atsign "$directory"
   done
-  tput setaf 2
 
   # curl the base files for atsign
   for file in $atsign_files; do
