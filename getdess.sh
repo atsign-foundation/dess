@@ -60,7 +60,32 @@ get_dess_scripts () {
 }
 
 do_install () {
+  pre_install
 
+  sh_c=''
+  if [[ $EUID -ne 0 ]]; then
+    if command_exists sudo; then
+      sh_c='sudo -E sh -c'
+    elif command_exists su; then
+      sh_c='su -c'
+    else
+      echo 'Error: unable to perform root operations';
+      echo 'Please run this script as root to complete installation.';
+      exit 1
+    fi
+  fi
+
+  FUNC=$(declare -f)
+  $sh_c '
+    $FUNC;
+    install_dependencies
+    install_certbot
+    install_docker
+    setup_atsign_user
+    setup_docker
+    test_atsign_user
+    get_dess_scripts
+  ';
 }
 
 do_install
