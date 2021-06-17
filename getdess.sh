@@ -35,6 +35,7 @@ atsign_dirs="~atsign/dess ~atsign/base ~atsign/atsign/var ~atsign/atsign/etc ~at
 # Repository files
 repo_url=""
 atsign_files="base/.env base/docker-swarm.yaml base/setup.sh base/shepherd.yaml"
+dess_scripts="create reshowqr"
 
 command_exists () {
   command -v "$@" > /dev/null 2>&1
@@ -203,6 +204,11 @@ test_atsign_user () {
 get_dess_scripts () {
   # curl create and reshowqr from repo
   # to /usr/local/bin
+  for script in $dess_scripts; do
+    curl -fsSL "$repo_url"/"$script".sh /usr/local/bin/dess-"$script"
+    chmod +x /usr/local/bin/dess-"$script"
+    ln -s /usr/local/bin/dess-"$script" /usr/bin/dess-"$script"
+  done
 }
 
 do_install () {
@@ -213,7 +219,7 @@ do_install () {
     if command_exists sudo; then
       sh_c='sudo -E sh -c'
     elif command_exists su; then
-      sh_c='su -c'
+      sh_c='su --preserve-environment -c'
     else
       echo 'Error: unable to perform root operations';
       echo 'Please run this script as root to complete installation.';
