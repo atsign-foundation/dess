@@ -30,7 +30,7 @@ compose_url="https://github.com/docker/compose/releases/download/1.29/docker-com
 user_info="atsign, secondaries account, atsign.com"
 
 # Atsign directories
-atsign_dirs="~atsign/dess ~atsign/base ~atsign/atsign/var ~atsign/atsign/etc ~atsign/atsign/logs"
+atsign_dirs="/home/atsign/dess /home/atsign/base /home/atsign/atsign/var /home/atsign/atsign/etc /home/atsign/atsign/logs"
 
 # Repository files
 repo_url="https://raw.githubusercontent.com/XavierChanth/dess/curl-testing"
@@ -135,9 +135,9 @@ mkdir_atsign () {
 }
 
 curl_atsign_file () {
-  curl -fsSL "$repo_url"/"$1" -o ~atsign/"$1"
+  curl -fsSL "$repo_url/$1" -o "/home/atsign/$1"
   echo "curling $1"
-  chown atsign ~atsign/"$1"
+  chown atsign "/home/atsign/$1"
 }
 
 setup_atsign_user () {
