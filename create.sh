@@ -1,4 +1,9 @@
 #!/bin/bash
+
+if [ $EUID != 0 ]; then
+    echo 'Error: please run this script as root.'
+fi
+
 if [[ $# -eq 0 || $# -gt 5 ]] ; then
     echo 'Usage create.sh <@sign> <fqdn> <port> <email> <service>'
     echo "Example create.sh @bob bob.example.com 6464 bob@example.com bob"
@@ -77,20 +82,20 @@ fi
 
 
 # Copy files in from base
-runuser -l atsign -c mkdir -p ~atsign/dess/"$ATSIGN"
-runuser -l atsign -c cp  base/.env ~atsign/dess/"$ATSIGN"
-runuser -l atsign -c cp  base/docker-swarm.yaml ~atsign/dess/"$ATSIGN"
+runuser -l atsign -c "mkdir -p /home/atsign/dess/$ATSIGN"
+runuser -l atsign -c "cp /home/atsign/base/.env /home/atsign/dess/$ATSIGN"
+runuser -l atsign -c "cp /home/atsign/base/docker-swarm.yaml /home/atsign/dess/$ATSIGN"
 # Make the directories in atsign
-runuser -l atsign -c mkdir -p ~atsign/atsign/"$ATSIGN"/storage
+runuser -l atsign -c "mkdir -p /home/atsign/atsign/$ATSIGN/storage"
 # Make the edits to the .env file
 # First comment out everything
-runuser -l atsign -c sed -i 's/^\([^#].*\)/# \1/g' ~atsign/dess/"$ATSIGN"/.env
+runuser -l atsign -c "sed -i 's/^\([^#].*\)/# \1/g' /home/atsign/dess/$ATSIGN/.env"
 # Add the environment variables we need
-echo "ATSIGN=$ATSIGN" |runuser -l atsign -c tee -a  ~atsign/dess/"$ATSIGN"/.env
-echo "DOMAIN=$FQDN" |runuser -l atsign -c tee -a ~atsign/dess/"$ATSIGN"/.env
-echo "PORT=$PORT" |runuser -l atsign -c tee -a  ~atsign/dess/"$ATSIGN"/.env
-echo "EMAIL=$EMAIL" |runuser -l atsign -c tee -a  ~atsign/dess/"$ATSIGN"/.env
-echo "SECRET=$SECRET" |runuser -l atsign -c tee -a  ~atsign/dess/"$ATSIGN"/.env
+echo "ATSIGN=$ATSIGN" |runuser -l atsign -c "tee -a  /home/atsign/dess/$ATSIGN/.env"
+echo "DOMAIN=$FQDN" |runuser -l atsign -c "tee -a /home/atsign/dess/$ATSIGN/.env"
+echo "PORT=$PORT" |runuser -l atsign -c "tee -a  /home/atsign/dess/$ATSIGN/.env"
+echo "EMAIL=$EMAIL" |runuser -l atsign -c "tee -a  /home/atsign/dess/$ATSIGN/.env"
+echo "SECRET=$SECRET" |runuser -l atsign -c "tee -a  /home/atsign/dess/$ATSIGN/.env"
 # copy over the .env file to base so we can renew the certs with an up to date EMAIL
 runuser -l atsign -c cp  ~atsign/dess/"$ATSIGN"/.env ~atsign/base/
 # Get the certificate for the @sign
@@ -103,11 +108,11 @@ sudo certbot certonly --standalone --domains "$FQDN" --non-interactive --agree-t
 
 # Last task to put in place the restart script and regenerate the ssl root CA file (as root)
 # Root CA
-sudo curl -L -o  ~atsign/atsign/etc/live/"$FQDN"/cacert.pem https://curl.se/ca/cacert.pem
+sudo curl -L -o  /home/atsign/atsign/etc/live/"$FQDN"/cacert.pem https://curl.se/ca/cacert.pem
 # Put some ownership in place so atsign can read the certs
-sudo chown -R atsign:atsign ~atsign/atsign/"$ATSIGN"
-sudo chown -R atsign:atsign ~atsign/atsign/etc/live/"$FQDN"
-sudo chown -R atsign:atsign ~atsign/atsign/etc/archive/"$FQDN"
+sudo chown -R atsign:atsign "/home/atsign/atsign/$ATSIGN"
+sudo chown -R atsign:atsign "/home/atsign/atsign/etc/live/$FQDN"
+sudo chown -R atsign:atsign "/home/atsign/atsign/etc/archive/$FQDN"
 # Copy over restart script
 sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
 #
@@ -118,8 +123,8 @@ sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
 # Docker insists on a name that is DNS compliant and so emojis and @ signs are out hence the $SERVICE tag
 # we use a neat trick using docker-compose to create the compose file for us.
     echo Starting secondary for "$ATSIGN" at "$FQDN" on port "$PORT" as "$DNAME" on Docker
-runuser -l atsign -c docker-compose --env-file ~atsign/dess/"$ATSIGN"/.env -f ~atsign/dess/"$ATSIGN"/docker-swarm.yaml config | runuser -l atsign -c tee ~atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null
-runuser -l atsign -c docker stack deploy -c ~atsign/dess/"$ATSIGN"/docker-compose.yaml "$SERVICE"
+runuser -l atsign -c "docker-compose --env-file /home/atsign/dess/$ATSIGN/.env -f /home/atsign/dess/$ATSIGN/docker-swarm.yaml config | tee ~atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null"
+runuser -l atsign -c "docker stack deploy -c /home/atsign/dess/$ATSIGN/docker-compose.yaml $SERVICE"
     echo Your QR-Code for "$ATSIGN"
     tput setaf 9
 qrencode -t ANSIUTF8 "${ATSIGN}:${SECRET}"
