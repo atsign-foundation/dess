@@ -2,7 +2,7 @@
 
 ## Preparation
 ### You will need
-- Freshly built Linux machine (Ubuntu/Debian)
+- Freshly built Linux machine (Ubuntu/Debian/CentOS)
 - A static or Dynamic DNS address that points the machines IP interface
 - A free port number that is accessible from the internet to your machine (1024-65535)
 - An email address so you can get the SSL Certificate from LetsEncrypt.com 
