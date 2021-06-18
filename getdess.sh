@@ -81,12 +81,12 @@ pre_install () {
 install_dependencies () {
   $pkg_man -y update
   for pkg in $packages; do
-    $pkg_man -y install $pkg
+    $pkg_man -y install "$pkg"
   done
   # Container support
   if [[ $(systemd-detect-virt) != 'none' ]]; then
     for lxc_pkg in $lxc_packages; do
-      $pkg_man -y install $lxc_pkg
+      $pkg_man -y install "$lxc_pkg"
     done
   fi
 }
