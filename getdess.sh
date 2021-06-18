@@ -149,12 +149,12 @@ setup_atsign_user () {
   fi
 
   # link lets-encrypt folder
-  if [[ ! -d ~atsign/atsign/etc ]]; then
+  if [[ ! -d /home/atsign/atsign/etc ]]; then
     tput setaf 2
     echo "setting up certbot"
     rm /etc/letsencrypt/*
     rmdir /etc/letsencrypt/
-    ln -s ~atsign/atsign/etc /etc/letsencrypt
+    ln -s /home/atsign/atsign/etc /etc/letsencrypt
     tput setaf 9
   else
     tput setaf 1
