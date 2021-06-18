@@ -78,9 +78,9 @@ command_exists () {
 sh_c=''
 change_sh () {
     if command_exists sudo; then
-        sh_c="sudo -E -u $1 sh -c"
+        sh_c="sudo -u $1 sh -c"
     elif command_exists su; then
-        sh_c="su -l $1 --preserve-environment -c"
+        sh_c="su -l $1 -c"
     else
         echo 'Error: unable to perform operations as atsign user';
         exit 1
@@ -103,15 +103,15 @@ $sh_c "cp /home/atsign/base/docker-swarm.yaml /home/atsign/dess/$ATSIGN"
 $sh_c "mkdir -p /home/atsign/atsign/$ATSIGN/storage"
 # Make the edits to the .env file
 # First comment out everything
-$sh_c "sed -i 's/^\([^#].*\)/# \1/g' /home/atsign/dess/$ATSIGN/.env"
+#$sh_c "sed -i 's/^\([^#].*\)/# \1/g' /home/atsign/dess/$ATSIGN/.env"
 # Add the environment variables we need
-$sh_c "tee -a  /home/atsign/dess/$ATSIGN/.env <<< ATSIGN=$ATSIGN"
-$sh_c "tee -a /home/atsign/dess/$ATSIGN/.env <<< DOMAIN=$FQDN"
-$sh_c "tee -a  /home/atsign/dess/$ATSIGN/.env <<< PORT=$PORT"
-$sh_c "tee -a  /home/atsign/dess/$ATSIGN/.env <<< EMAIL=$EMAIL"
-$sh_c "tee -a  /home/atsign/dess/$ATSIGN/.env <<< SECRET=$SECRET"
+$sh_c "tee -a /home/atsign/dess/$ATSIGN/.env <<< $(echo ATSIGN="$ATSIGN" | awk -F= '{print $1 $2}')"
+$sh_c "tee -a /home/atsign/dess/$ATSIGN/.env <<< $(echo DOMAIN="$FQDN" | awk -F= '{print $1 $2}')"
+$sh_c "tee -a /home/atsign/dess/$ATSIGN/.env <<< $(echo PORT="$PORT" | awk -F= '{print $1 $2}')"
+$sh_c "tee -a /home/atsign/dess/$ATSIGN/.env <<< $(echo EMAIL="$EMAIL" | awk -F= '{print $1 $2}')"
+$sh_c "tee -a /home/atsign/dess/$ATSIGN/.env <<< $(echo SECRET="$SECRET" | awk -F= '{print $1 $2}')"
 # copy over the .env file to base so we can renew the certs with an up to date EMAIL
-$sh_c "cp  /home/atsign/dess/$ATSIGN/.env /home/atsign/base/"
+$sh_c "cp /home/atsign/dess/$ATSIGN/.env /home/atsign/base/"
 # Get the certificate for the @sign
 tput setaf 2
 echo "Getting certificates"
