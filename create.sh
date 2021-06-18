@@ -14,7 +14,7 @@ export env SERVICE=$5
 
 # Let's make a secret whilst we are here !
 # hashalot should have been installed by now
-export env SECRET=$(head -30 /dev/urandom |openssl sha512 | awk -F'= ' '{print $2}')
+export env SECRET=$(head -30 /dev/urandom | openssl sha512 | awk -F'= ' '{print $2}')
 
 # Check that we have an @ in the @sign
 if [[ ! $ATSIGN  =~ ^@.*$ ]]
@@ -126,11 +126,11 @@ $sh_c "certbot certonly --standalone --domains $FQDN --non-interactive --agree-t
 # Root CA
 $sh_c "curl -L -o  /home/atsign/atsign/etc/live/$FQDN/cacert.pem https://curl.se/ca/cacert.pem"
 # Put some ownership in place so atsign can read the certs
-$sh_c "chown -R atsign:atsign /home/atsign/atsign/$ATSIGN"
+$sh_c "chown -R atsign:atsign /home/atsign/dess/$ATSIGN"
 $sh_c "chown -R atsign:atsign /home/atsign/atsign/etc/live/$FQDN"
 $sh_c "chown -R atsign:atsign /home/atsign/atsign/etc/archive/$FQDN"
 # Copy over restart script
-$sh_c "cp base/restart.sh /home/atsign/atsign/etc/renewal-hooks/deploy"
+$sh_c "cp /home/atsign/base/restart.sh /home/atsign/atsign/etc/renewal-hooks/deploy"
 #
 #
 # We are now ready to start the secondary !
@@ -140,8 +140,8 @@ $sh_c "cp base/restart.sh /home/atsign/atsign/etc/renewal-hooks/deploy"
 # we use a neat trick using docker-compose to create the compose file for us.
 change_sh 'atsign'
     echo Starting secondary for "$ATSIGN" at "$FQDN" on port "$PORT" as "$DNAME" on Docker
-$sh_c "docker-compose --env-file /home/atsign/dess/$ATSIGN/.env -f /home/atsign/dess/$ATSIGN/docker-swarm.yaml config | tee ~atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null"
-$sh_c "docker stack deploy -c /home/atsign/dess/$ATSIGN/docker-compose.yaml $SERVICE"
+$sh_c "/usr/bin/docker-compose --env-file /home/atsign/dess/$ATSIGN/.env -f /home/atsign/dess/$ATSIGN/docker-swarm.yaml config | tee ~atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null"
+$sh_c "/usr/bin/docker stack deploy -c /home/atsign/dess/$ATSIGN/docker-compose.yaml $SERVICE"
     echo Your QR-Code for "$ATSIGN"
     tput setaf 9
 qrencode -t ANSIUTF8 "${ATSIGN}:${SECRET}"
