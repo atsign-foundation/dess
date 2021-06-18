@@ -14,30 +14,26 @@
 - We assume the machine we are installing on has no other software installed. SO carefully examine the scripts if for example you want to install a specific version of docker. Hints are in the scripts on how to do this
 
 ## Getting started
-- Install this repo
-  ```
-  sudo apt update
-  sudo apt install git
-  cd
-  git clone https://github.com/atsign-foundation/dess.git
-  cd dess
-  ```
 - Make sure you have root access via sudo for your account
   ```
   sudo -s 
   # exit
   ```
+- Debian and Ubuntu users may need to install curl first:
+  ```
+  sudo apt install curl
+  ```
 - Install the software and follow the prompts to install the atsign user
   ```
-  ./install_software.sh
+  curl -fsSL https://raw.githubusercontent.com/atsign-foundation/dess/trunk/getdess.sh | bash
   ```
 - Create a secondary, using the create.sh script and follow the instructions
   ```
-  ./create.sh
+  dess-create
   ```
 - If you need to see the QR code again for an @sign then run:
   ```
-  ./reshowqr.sh @youratsign
+  dess-reshowqr @youratsign
   ```
 - Sign in to the atsign.com registrar and update your @signs DNS and port number information
 - Fire up an @ app like @buzz or @wavi and pair your device to your secondary
