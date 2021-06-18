@@ -199,7 +199,7 @@ setup_docker () {
 
 test_atsign_user () {
   # check if docker works for atsign user
-  runuser -l atsign -c /usr/bin/docker run hello-world
+  runuser -l atsign -c '/usr/bin/docker run hello-world'
   RESULT=$?
   if [[ $RESULT -eq 0 ]]; then
     echo "Docker setup correctly for atsign user"
