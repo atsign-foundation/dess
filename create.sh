@@ -77,28 +77,28 @@ fi
 
 
 # Copy files in from base
-sudo -u atsign mkdir -p ~atsign/dess/"$ATSIGN"
-sudo -u atsign cp  base/.env ~atsign/dess/"$ATSIGN"
-sudo -u atsign cp  base/docker-swarm.yaml ~atsign/dess/"$ATSIGN"
+runuser -l atsign -c mkdir -p ~atsign/dess/"$ATSIGN"
+runuser -l atsign -c cp  base/.env ~atsign/dess/"$ATSIGN"
+runuser -l atsign -c cp  base/docker-swarm.yaml ~atsign/dess/"$ATSIGN"
 # Make the directories in atsign
-sudo -u atsign mkdir -p ~atsign/atsign/"$ATSIGN"/storage
+runuser -l atsign -c mkdir -p ~atsign/atsign/"$ATSIGN"/storage
 # Make the edits to the .env file
 # First comment out everything
-sudo -u atsign sed -i 's/^\([^#].*\)/# \1/g' ~atsign/dess/"$ATSIGN"/.env
+runuser -l atsign -c sed -i 's/^\([^#].*\)/# \1/g' ~atsign/dess/"$ATSIGN"/.env
 # Add the environment variables we need
-echo "ATSIGN=$ATSIGN" |sudo -u atsign tee -a  ~atsign/dess/"$ATSIGN"/.env
-echo "DOMAIN=$FQDN" |sudo -u atsign tee -a ~atsign/dess/"$ATSIGN"/.env
-echo "PORT=$PORT" |sudo -u atsign tee -a  ~atsign/dess/"$ATSIGN"/.env
-echo "EMAIL=$EMAIL" |sudo -u atsign tee -a  ~atsign/dess/"$ATSIGN"/.env
-echo "SECRET=$SECRET" |sudo -u atsign tee -a  ~atsign/dess/"$ATSIGN"/.env
+echo "ATSIGN=$ATSIGN" |runuser -l atsign -c tee -a  ~atsign/dess/"$ATSIGN"/.env
+echo "DOMAIN=$FQDN" |runuser -l atsign -c tee -a ~atsign/dess/"$ATSIGN"/.env
+echo "PORT=$PORT" |runuser -l atsign -c tee -a  ~atsign/dess/"$ATSIGN"/.env
+echo "EMAIL=$EMAIL" |runuser -l atsign -c tee -a  ~atsign/dess/"$ATSIGN"/.env
+echo "SECRET=$SECRET" |runuser -l atsign -c tee -a  ~atsign/dess/"$ATSIGN"/.env
 # copy over the .env file to base so we can renew the certs with an up to date EMAIL
-sudo -u atsign cp  ~atsign/dess/"$ATSIGN"/.env ~atsign/base/
+runuser -l atsign -c cp  ~atsign/dess/"$ATSIGN"/.env ~atsign/base/
 # Get the certificate for the @sign
     tput setaf 2
     echo "Getting certificates"
     tput setaf 9
 
-#     sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-compose.yaml run  --service-ports cert
+#     runuser -l atsign -c docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-compose.yaml run  --service-ports cert
 sudo certbot certonly --standalone --domains "$FQDN" --non-interactive --agree-tos -m "$EMAIL"
 
 # Last task to put in place the restart script and regenerate the ssl root CA file (as root)
@@ -118,8 +118,8 @@ sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
 # Docker insists on a name that is DNS compliant and so emojis and @ signs are out hence the $SERVICE tag
 # we use a neat trick using docker-compose to create the compose file for us.
     echo Starting secondary for "$ATSIGN" at "$FQDN" on port "$PORT" as "$DNAME" on Docker
-sudo -u atsign docker-compose --env-file ~atsign/dess/"$ATSIGN"/.env -f ~atsign/dess/"$ATSIGN"/docker-swarm.yaml config | sudo -u atsign tee ~atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null
-sudo -u atsign docker stack deploy -c ~atsign/dess/"$ATSIGN"/docker-compose.yaml "$SERVICE"
+runuser -l atsign -c docker-compose --env-file ~atsign/dess/"$ATSIGN"/.env -f ~atsign/dess/"$ATSIGN"/docker-swarm.yaml config | runuser -l atsign -c tee ~atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null
+runuser -l atsign -c docker stack deploy -c ~atsign/dess/"$ATSIGN"/docker-compose.yaml "$SERVICE"
     echo Your QR-Code for "$ATSIGN"
     tput setaf 9
 qrencode -t ANSIUTF8 "${ATSIGN}:${SECRET}"
