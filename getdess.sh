@@ -24,7 +24,7 @@ lxc_packages="fuse squashfuse"
 packages="curl openssl qrencode"
 
 # Docker compose link
-compose_url="https://github.com/docker/compose/releases/download/1.29/docker-compose"
+compose_url="https://github.com/docker/compose/releases/download/1.29.2/docker-compose"
 
 # Atsign user info
 user_info="atsign, secondaries account, atsign.com"
