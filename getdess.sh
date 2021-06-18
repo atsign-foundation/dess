@@ -198,7 +198,7 @@ test_atsign_user () {
     sh_uc='su atsign -c'
   fi
   # check if docker works for atsign user
-  "$sh_uc" docker run hello-world
+  "$sh_uc" /usr/bin/docker run hello-world
   RESULT=$?
   if [[ $RESULT -eq 0 ]]; then
     echo "Docker setup correctly for atsign user"
