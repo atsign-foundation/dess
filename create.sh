@@ -93,14 +93,16 @@ tput setaf 2
 echo "Creating $ATSIGN with $FQDN:$PORT with email $EMAIL with docker service name of $SERVICE"
 tput setaf 9
 
+change_sh 'root'
+# Make the directories in atsign
+$sh_c "mkdir -p /home/atsign/atsign/$ATSIGN/storage"
+
 change_sh 'atsign'
 
 # Copy files in from base
 $sh_c "mkdir -p /home/atsign/dess/$ATSIGN"
 $sh_c "cp /home/atsign/base/.env /home/atsign/dess/$ATSIGN"
 $sh_c "cp /home/atsign/base/docker-swarm.yaml /home/atsign/dess/$ATSIGN"
-# Make the directories in atsign
-$sh_c "mkdir -p /home/atsign/atsign/$ATSIGN/storage"
 # Make the edits to the .env file
 # First comment out everything
 $sh_c "sed -i 's/^\([^#].*\)/# \1/g' /home/atsign/dess/$ATSIGN/.env"
