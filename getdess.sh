@@ -175,6 +175,8 @@ setup_atsign_user () {
   for file in $atsign_files; do
     curl_atsign_file "$file"
   done
+
+  chown atsign:atsign /home/atsign
 }
 
 setup_docker () {
