@@ -34,7 +34,7 @@ atsign_dirs="/home/atsign/dess /home/atsign/base /home/atsign/atsign/var /home/a
 
 # Repository files
 repo_url="https://raw.githubusercontent.com/XavierChanth/dess/curl-testing"
-atsign_files="base/.env base/docker-swarm.yaml base/setup.sh base/shepherd.yaml"
+atsign_files="base/.env base/docker-swarm.yaml base/setup.sh base/shepherd.yaml base/restart.sh"
 dess_scripts="create reshowqr"
 
 # Original user
