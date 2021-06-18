@@ -93,9 +93,6 @@ tput setaf 2
 echo "Creating $ATSIGN with $FQDN:$PORT with email $EMAIL with docker service name of $SERVICE"
 tput setaf 9
 
-change_sh 'root'
-# Make the directories in atsign
-$sh_c "mkdir -p /home/atsign/atsign/$ATSIGN/storage"
 
 change_sh 'atsign'
 
@@ -120,6 +117,9 @@ echo "Getting certificates"
 tput setaf 9
 
 change_sh 'root'
+
+# Make the directories in atsign
+$sh_c "mkdir -p /home/atsign/atsign/$ATSIGN/storage"
 
 #     $sh_c docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-compose.yaml run  --service-ports cert
 $sh_c "certbot certonly --standalone --domains $FQDN --non-interactive --agree-tos -m $EMAIL"
