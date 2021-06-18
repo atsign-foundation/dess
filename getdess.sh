@@ -126,6 +126,7 @@ install_docker () {
   curl -fsSL "$compose_url-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   chmod +x /usr/local/bin/docker-compose
   ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+  systemctl enable --now docker.service
 }
 
 mkdir_atsign () {
@@ -177,6 +178,13 @@ setup_atsign_user () {
 }
 
 setup_docker () {
+  # wait for docker to startup
+  STATUS=1
+  while [[ $STATUS -ne 0 ]]; do
+    systemctl is-active --quiet docker.service
+    STATUS=$?
+  done
+
   # give atsign user docker permissions
   usermod -aG docker atsign
 
