@@ -102,12 +102,15 @@ install_certbot () {
   ln -s /var/lib/snapd/snap /snap
   # enable and start snapd
   systemctl enable --now snapd.service
+  systemctl start snapd.service
   # wait for snapd to startup
   STATUS=1
   while [[ $STATUS -ne 0 ]]; do
     systemctl is-active --quiet snapd.service
     STATUS=$?
   done
+  echo Starting snapd service
+  sleep 2
   # install snap core
   snap install core
   snap refresh core
