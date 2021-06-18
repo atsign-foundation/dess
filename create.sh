@@ -14,7 +14,7 @@ export env SERVICE=$5
 
 # Let's make a secret whilst we are here !
 # hashalot should have been installed by now
-export env SECRET=$(head -30 /dev/urandom |openssl sha512)
+export env SECRET=$(head -30 /dev/urandom |openssl sha512 | awk -F'= ' '{print $2}')
 
 # Check that we have an @ in the @sign
 if [[ ! $ATSIGN  =~ ^@.*$ ]]
@@ -105,11 +105,11 @@ $sh_c "mkdir -p /home/atsign/atsign/$ATSIGN/storage"
 # First comment out everything
 #$sh_c "sed -i 's/^\([^#].*\)/# \1/g' /home/atsign/dess/$ATSIGN/.env"
 # Add the environment variables we need
-$sh_c "tee -a /home/atsign/dess/$ATSIGN/.env <<< $(echo ATSIGN="$ATSIGN" | awk -F= '{print $1 $2}')"
-$sh_c "tee -a /home/atsign/dess/$ATSIGN/.env <<< $(echo DOMAIN="$FQDN" | awk -F= '{print $1 $2}')"
-$sh_c "tee -a /home/atsign/dess/$ATSIGN/.env <<< $(echo PORT="$PORT" | awk -F= '{print $1 $2}')"
-$sh_c "tee -a /home/atsign/dess/$ATSIGN/.env <<< $(echo EMAIL="$EMAIL" | awk -F= '{print $1 $2}')"
-$sh_c "tee -a /home/atsign/dess/$ATSIGN/.env <<< $(echo SECRET="$SECRET" | awk -F= '{print $1 $2}')"
+$sh_c "tee -a /home/atsign/dess/$ATSIGN/.env <<< ATSIGN=$ATSIGN"
+$sh_c "tee -a /home/atsign/dess/$ATSIGN/.env <<< DOMAIN=$FQDN"
+$sh_c "tee -a /home/atsign/dess/$ATSIGN/.env <<< PORT=$PORT"
+$sh_c "tee -a /home/atsign/dess/$ATSIGN/.env <<< EMAIL=$EMAIL"
+$sh_c "tee -a /home/atsign/dess/$ATSIGN/.env <<< SECRET=$SECRET"
 # copy over the .env file to base so we can renew the certs with an up to date EMAIL
 $sh_c "cp /home/atsign/dess/$ATSIGN/.env /home/atsign/base/"
 # Get the certificate for the @sign
