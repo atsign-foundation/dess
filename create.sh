@@ -103,7 +103,7 @@ $sh_c "cp /home/atsign/base/docker-swarm.yaml /home/atsign/dess/$ATSIGN"
 $sh_c "mkdir -p /home/atsign/atsign/$ATSIGN/storage"
 # Make the edits to the .env file
 # First comment out everything
-#$sh_c "sed -i 's/^\([^#].*\)/# \1/g' /home/atsign/dess/$ATSIGN/.env"
+$sh_c "sed -i 's/^\([^#].*\)/# \1/g' /home/atsign/dess/$ATSIGN/.env"
 # Add the environment variables we need
 $sh_c "echo ATSIGN=$ATSIGN | tee -a /home/atsign/dess/$ATSIGN/.env"
 $sh_c "echo DOMAIN=$FQDN | tee -a /home/atsign/dess/$ATSIGN/.env"
@@ -126,7 +126,7 @@ $sh_c "certbot certonly --standalone --domains $FQDN --non-interactive --agree-t
 # Root CA
 $sh_c "curl -L -o  /home/atsign/atsign/etc/live/$FQDN/cacert.pem https://curl.se/ca/cacert.pem"
 # Put some ownership in place so atsign can read the certs
-$sh_c "chown -R atsign:atsign /home/atsign/dess/$ATSIGN"
+$sh_c "chown -R atsign:atsign /home/atsign/atsign/$ATSIGN"
 $sh_c "chown -R atsign:atsign /home/atsign/atsign/etc/live/$FQDN"
 $sh_c "chown -R atsign:atsign /home/atsign/atsign/etc/archive/$FQDN"
 # Copy over restart script
