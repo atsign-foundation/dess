@@ -71,6 +71,10 @@ then
     exit 1
 fi
 
+command_exists () {
+    command -v "$@" > /dev/null 2>&1
+}
+
 sh_c=''
 change_sh () {
     if command_exists sudo; then
