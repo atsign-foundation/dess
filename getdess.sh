@@ -55,7 +55,7 @@ pre_install () {
   if [ -z "$os_release" ]
   then
       echo 'Error: Could not detect your distribution.'
-      exit 0
+      exit 1
   fi
   echo "Detected distribution: $os_release";
 
