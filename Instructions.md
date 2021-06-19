@@ -25,7 +25,7 @@
   ```
 - Install the software and follow the prompts to install the atsign user
   ```
-  curl -fsSL https://raw.githubusercontent.com/atsign-foundation/dess/trunk/getdess.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/atsign-foundation/dess/trunk/getdess.sh | sudo bash
   ```
 - Create a secondary, using the create.sh script and follow the instructions
   ```
