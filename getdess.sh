@@ -17,7 +17,7 @@ set -m
 
 # Supported distros by type
 debian_releases='ubuntu debian'
-redhat_releases='centos fedora'
+redhat_releases='centos fedora amazon'
 
 # Required base packages
 lxc_packages="fuse squashfuse"
