@@ -107,8 +107,10 @@ install_certbot () {
 install_docker () {
   # docker
   if ! command_exists docker; then
-    curl -fsSL https://get.docker.com -o get-docker.sh
-    sh get-docker.sh
+    case $os_release in
+      amzn) amazon-linux-extras install docker;;
+      *) curl -fsSL https://get.docker.com | sh;;
+    esac
   fi
 
   # docker-compose
