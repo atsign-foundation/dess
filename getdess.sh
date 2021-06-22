@@ -97,6 +97,12 @@ install_certbot () {
 
     *);;
   esac
+  # Versions using this approach
+  # Ubuntu 20.10 - 1.7.0
+  # Debian 10 - 0.31.0
+  # Fedora 34 - 1.14.0
+  # Centos 7 - 1.11.0
+  # Centos 8 - 1.14.0
   echo y | $pkg_man -y install certbot
 }
 
