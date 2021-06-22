@@ -87,7 +87,7 @@ install_dependencies () {
 install_certbot () {
   case "$os_release" in
     centos) echo y | $pkg_man -y install epel-release;;
-
+    amazon) echo y | amazon-linux-extras install epel;;
     *);;
   esac
   # Versions using this approach
@@ -96,6 +96,7 @@ install_certbot () {
   # Fedora 34 - 1.14.0
   # Centos 7 - 1.11.0
   # Centos 8 - 1.14.0
+  # Amazon Linux - 1.11.0
   echo y | $pkg_man -y install certbot
 }
 
