@@ -20,7 +20,6 @@ debian_releases='ubuntu debian'
 redhat_releases='centos fedora amazon'
 
 # Required base packages
-lxc_packages="fuse squashfuse"
 packages="curl openssl qrencode"
 
 # Docker compose link
@@ -83,12 +82,6 @@ install_dependencies () {
   for pkg in $packages; do
     $pkg_man -y install "$pkg"
   done
-  # Container support
-  if [[ $(systemd-detect-virt) != 'none' ]]; then
-    for lxc_pkg in $lxc_packages; do
-      $pkg_man -y install "$lxc_pkg"
-    done
-  fi
 }
 
 install_certbot () {
