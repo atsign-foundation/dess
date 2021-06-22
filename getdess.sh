@@ -50,8 +50,8 @@ is_release () { [[ $1 =~ (^|[[:space:]])$2($|[[:space:]]) ]]; }
 
 pre_install () {
   # Get the user's release
-  os_release=$(awk -F= '/^ID/{print $2}' /etc/os-release | sed 's/\"//g')
-  os_id=$(awk -F= '/^VERSION_ID/{print $2}' /etc/os-release | sed 's/\"//g')
+  os_release=$(awk -F= '/^ID=/{print $2}' /etc/os-release | sed 's/\"//g')
+  os_id=$(awk -F= '/^VERSION_ID=/{print $2}' /etc/os-release | sed 's/\"//g')
 
   if [ -z "$os_release" ]
   then
