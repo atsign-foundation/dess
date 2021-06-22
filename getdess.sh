@@ -94,6 +94,7 @@ install_dependencies () {
 install_certbot () {
   case "$os_release" in
     centos) echo y | $pkg_man -y install epel-release;;
+
     *);;
   esac
   echo y | $pkg_man -y install certbot
@@ -165,10 +166,17 @@ setup_atsign_user () {
 
 setup_docker () {
   # wait for docker to startup
+  SECONDS=0
   STATUS=1
-  while [[ $STATUS -ne 0 ]]; do
+  until [[ $STATUS -ne 0 ]]; do
     systemctl is-active --quiet docker.service
     STATUS=$?
+    SECONDS=$SECONDS+1
+    if [[ $SECONDS -gt 120 ]]; then
+      echo 'Error: Docker daemon is not starting...'
+      echo 'Please check your docker installation before running again.'
+      exit 1
+    fi
   done
 
   # give atsign user docker permissions
