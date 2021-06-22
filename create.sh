@@ -122,7 +122,7 @@ change_sh 'root'
 $sh_c "mkdir -p /home/atsign/atsign/$ATSIGN/storage"
 
 #     $sh_c docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-compose.yaml run  --service-ports cert
-$sh_c "/snap/bin/certbot certonly --standalone --domains $FQDN --non-interactive --agree-tos -m $EMAIL"
+$sh_c "/usr/bin/certbot certonly --standalone --domains $FQDN --non-interactive --agree-tos -m $EMAIL"
 
 # Last task to put in place the restart script and regenerate the ssl root CA file (as root)
 # Root CA

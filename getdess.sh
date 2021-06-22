@@ -17,10 +17,9 @@ set -m
 
 # Supported distros by type
 debian_releases='ubuntu debian'
-redhat_releases='centos fedora amazon'
+redhat_releases='centos fedora amzn rhel'
 
 # Required base packages
-lxc_packages="fuse squashfuse"
 packages="curl openssl qrencode"
 
 # Docker compose link
@@ -33,7 +32,7 @@ user_info="atsign, secondaries account, atsign.com"
 atsign_dirs="/home/atsign/dess /home/atsign/base /home/atsign/atsign/var /home/atsign/atsign/etc /home/atsign/atsign/logs"
 
 # Repository files
-repo_url="https://raw.githubusercontent.com/xavierchanth/dess/curl-testing"
+repo_url="https://raw.githubusercontent.com/xavierchanth/dess/certbot-install-testing"
 atsign_files="base/.env base/docker-swarm.yaml base/setup.sh base/shepherd.yaml base/restart.sh"
 dess_scripts="create reshowqr"
 
@@ -51,13 +50,15 @@ is_release () { [[ $1 =~ (^|[[:space:]])$2($|[[:space:]]) ]]; }
 
 pre_install () {
   # Get the user's release
-  os_release=$(awk -F= '/^NAME/{print $2}' /etc/os-release | sed 's/\"//g' | awk '{print tolower($1)}')
+  os_release=$(awk -F= '/^ID=/{print $2}' /etc/os-release | sed 's/\"//g')
+  os_id=$(awk -F= '/^VERSION_ID=/{print $2}' /etc/os-release | sed 's/\"//g')
+
   if [ -z "$os_release" ]
   then
       echo 'Error: Could not detect your distribution.'
       exit 1
   fi
-  echo "Detected distribution: $os_release";
+  echo "Detected release id: $os_release, version: $os_id";
 
   # get package manager
   if is_release "$debian_releases" "$os_release"; then
@@ -81,48 +82,37 @@ pre_install () {
 install_dependencies () {
   $pkg_man -y update
   for pkg in $packages; do
-    $pkg_man -y install "$pkg"
+    if ! command_exists "$pkg"; then
+      $pkg_man -y install "$pkg"
+    fi
   done
-  # Container support
-  if [[ $(systemd-detect-virt) != 'none' ]]; then
-    for lxc_pkg in $lxc_packages; do
-      $pkg_man -y install "$lxc_pkg"
-    done
-  fi
 }
 
 install_certbot () {
-  # install snapd
-  if [[ "$os_release" == centos ]]; then
-    $pkg_man -y install epel-release
-  elif [[ "$os_release" == fedora ]]; then
-    $pkg_man -y install kernel-modules
-  fi
-  $pkg_man -y install snapd
-  ln -s /var/lib/snapd/snap /snap
-  # enable and start snapd
-  systemctl enable --now snapd.service
-  systemctl start snapd.service
-  # wait for snapd to startup
-  STATUS=1
-  while [[ $STATUS -ne 0 ]]; do
-    systemctl is-active --quiet snapd.service
-    STATUS=$?
-  done
-  echo Starting snapd service
-  sleep 2
-  # install snap core
-  snap install core
-  snap refresh core
-  # install certbot
-  snap install --classic certbot
+  case "$os_release" in
+    centos) echo y | $pkg_man -y install epel-release;;
+    amazon) echo y | amazon-linux-extras install epel;;
+    rhel) echo y | $pkg_man -y install "https://dl.fedoraproject.org/pub/epel/epel-release-latest-$($os_id | awk -F. '{print $1}').noarch.rpm";;
+    *);;
+  esac
+  # Versions using this approach
+  # Ubuntu 20.10 - 1.7.0
+  # Debian 10 - 0.31.0
+  # Fedora 34 - 1.14.0
+  # Centos 7 - 1.11.0
+  # Centos 8 - 1.14.0
+  # Amazon Linux - 1.11.0
+  # RHEL 8 - 1.14.0
+  echo y | $pkg_man -y install certbot
 }
 
 install_docker () {
   # docker
   if ! command_exists docker; then
-    curl -fsSL https://get.docker.com -o get-docker.sh
-    sh get-docker.sh
+    case $os_release in
+      amzn) amazon-linux-extras install docker;;
+      *) curl -fsSL https://get.docker.com | sh;;
+    esac
   fi
 
   # docker-compose
@@ -184,10 +174,17 @@ setup_atsign_user () {
 
 setup_docker () {
   # wait for docker to startup
+  SECONDS=0
   STATUS=1
-  while [[ $STATUS -ne 0 ]]; do
+  until [[ $STATUS -ne 0 ]]; do
     systemctl is-active --quiet docker.service
     STATUS=$?
+    SECONDS=$SECONDS+1
+    if [[ $SECONDS -gt 120 ]]; then
+      echo 'Error: Docker daemon is not starting...'
+      echo 'Please check your docker installation before running again.'
+      exit 1
+    fi
   done
 
   # give atsign user docker permissions
@@ -223,52 +220,22 @@ get_dess_scripts () {
   done
 }
 
-functions="
-  command_exists
-  pre_install
-  install_dependencies
-  install_certbot
-  install_docker
-  mkdir_atsign
-  curl_atsign_file
-  setup_atsign_user
-  setup_docker
-  test_atsign_user
-  get_dess_scripts
-  "
-
-export_functions () {
-  for func in $functions; do
-    export -f "${func?}"
-  done
-}
-
-unset_functions () {
-  for func in $functions; do
-    unset "$func"
-  done
-}
-
 do_install () {
   pre_install
-  export_functions
 
-  sh_c=''
   if [[ $EUID -ne 0 ]]; then
     echo 'Error: unable to perform root operations';
     echo 'Please run this script as root to complete installation.';
     exit 1
   fi
 
-  $sh_c install_dependencies
-  $sh_c install_certbot
-  $sh_c install_docker
-  $sh_c setup_atsign_user
-  $sh_c setup_docker
-  $sh_c test_atsign_user
-  $sh_c get_dess_scripts
-
-  unset_functions
+  install_dependencies
+  install_certbot
+  install_docker
+  setup_atsign_user
+  setup_docker
+  test_atsign_user
+  get_dess_scripts
 }
 
 do_install

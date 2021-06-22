@@ -5,8 +5,8 @@
 - Freshly built Linux machine (Ubuntu/Debian/CentOS)
 - A static or Dynamic DNS address that points the machines IP interface
 - A free port number that is accessible from the internet to your machine (1024-65535)
-- An email address so you can get the SSL Certificate from LetsEncrypt.com 
-- An @sign from atsign.com 
+- An email address so you can get the SSL Certificate from LetsEncrypt.com
+- An @sign from atsign.com
 
 ### What is missing right now
 - We are working on the interface on atsign.com to enter your dns/port for your @sign, this is a blocker for the moment but you can install and test this environment in the meantime
@@ -16,7 +16,7 @@
 ## Getting started
 - Make sure you have root access via sudo for your account
   ```
-  sudo -s 
+  sudo -s
   # exit
   ```
 - Debian and Ubuntu users may need to install curl first:
