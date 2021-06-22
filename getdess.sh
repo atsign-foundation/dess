@@ -17,7 +17,7 @@ set -m
 
 # Supported distros by type
 debian_releases='ubuntu debian'
-redhat_releases='centos fedora amazon'
+redhat_releases='centos fedora amzn rhel'
 
 # Required base packages
 packages="curl openssl qrencode"
@@ -32,7 +32,7 @@ user_info="atsign, secondaries account, atsign.com"
 atsign_dirs="/home/atsign/dess /home/atsign/base /home/atsign/atsign/var /home/atsign/atsign/etc /home/atsign/atsign/logs"
 
 # Repository files
-repo_url="https://raw.githubusercontent.com/xavierchanth/dess/curl-testing"
+repo_url="https://raw.githubusercontent.com/xavierchanth/dess/certbot-install-testing"
 atsign_files="base/.env base/docker-swarm.yaml base/setup.sh base/shepherd.yaml base/restart.sh"
 dess_scripts="create reshowqr"
 
@@ -50,13 +50,15 @@ is_release () { [[ $1 =~ (^|[[:space:]])$2($|[[:space:]]) ]]; }
 
 pre_install () {
   # Get the user's release
-  os_release=$(awk -F= '/^NAME/{print $2}' /etc/os-release | sed 's/\"//g' | awk '{print tolower($1)}')
+  os_release=$(awk -F= '/^ID/{print $2}' /etc/os-release | sed 's/\"//g')
+  os_id=$(awk -F= '/^VERSION_ID/{print $2' /etc/os-release | sed 's/\"//g')
+
   if [ -z "$os_release" ]
   then
       echo 'Error: Could not detect your distribution.'
       exit 1
   fi
-  echo "Detected distribution: $os_release";
+  echo "Detected release id: $os_release, version: $os_id";
 
   # get package manager
   if is_release "$debian_releases" "$os_release"; then
@@ -88,6 +90,7 @@ install_certbot () {
   case "$os_release" in
     centos) echo y | $pkg_man -y install epel-release;;
     amazon) echo y | amazon-linux-extras install epel;;
+    rhel) echo y | $pkg_man -y install "https://dl.fedoraproject.org/pub/epel/epel-release-latest-$os_id.noarch.rpm";;
     *);;
   esac
   # Versions using this approach
@@ -97,6 +100,7 @@ install_certbot () {
   # Centos 7 - 1.11.0
   # Centos 8 - 1.14.0
   # Amazon Linux - 1.11.0
+  # RHEL 8 - 1.14.0
   echo y | $pkg_man -y install certbot
 }
 
