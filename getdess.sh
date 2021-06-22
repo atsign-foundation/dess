@@ -180,6 +180,7 @@ setup_docker () {
     systemctl is-active --quiet docker.service
     STATUS=$?
     SECONDS=$SECONDS+1
+    sleep 1
     if [[ $SECONDS -gt 120 ]]; then
       echo 'Error: Docker daemon is not starting...'
       echo 'Please check your docker installation before running again.'
