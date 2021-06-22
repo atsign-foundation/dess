@@ -211,35 +211,8 @@ get_dess_scripts () {
   done
 }
 
-functions="
-  command_exists
-  pre_install
-  install_dependencies
-  install_certbot
-  install_docker
-  mkdir_atsign
-  curl_atsign_file
-  setup_atsign_user
-  setup_docker
-  test_atsign_user
-  get_dess_scripts
-  "
-
-export_functions () {
-  for func in $functions; do
-    export -f "${func?}"
-  done
-}
-
-unset_functions () {
-  for func in $functions; do
-    unset "$func"
-  done
-}
-
 do_install () {
   pre_install
-  export_functions
 
   if [[ $EUID -ne 0 ]]; then
     echo 'Error: unable to perform root operations';
@@ -254,8 +227,6 @@ do_install () {
   setup_docker
   test_atsign_user
   get_dess_scripts
-
-  unset_functions
 }
 
 do_install
