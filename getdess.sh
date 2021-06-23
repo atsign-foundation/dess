@@ -139,9 +139,8 @@ install_docker () {
     echo "$COMPOSE_RESULT"
     # Try the containerized installer
     if [[ $COMPOSE_RESULT -gt 0 ]]; then
-        echo 'Error: unable to install docker compose'
-        exit 51
-      fi
+      echo 'Error: unable to install docker compose'
+      exit 51
     fi
   fi
   chmod +x /usr/local/bin/docker-compose
