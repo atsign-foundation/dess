@@ -25,6 +25,8 @@ set -m
 debian_releases='ubuntu debian'
 redhat_releases='centos fedora amzn rhel'
 
+arch_support='x86_64 amd64 aarch64 arm64'
+
 # Required base packages
 packages="curl openssl qrencode"
 
@@ -66,6 +68,11 @@ pre_install () {
   fi
   echo "Detected release id: $os_release, version: $os_id";
 
+  if ! is_release "$arch_support" "$(uname -m)"; then
+    echo "Your architecture ($(uname -m)) is currently unsupported by this script."
+    exit 0
+  fi
+
   # get package manager
   if is_release "$debian_releases" "$os_release"; then
     pkg_man='apt-get'
@@ -77,7 +84,7 @@ pre_install () {
       pkg_man='yum'
     fi
   else
-    echo 'Your distribution is currently not supported by this script.'
+    echo 'Your distribution is currently unsupported by this script.'
     exit 0
   fi
   echo "Detected package manager: $pkg_man"
@@ -131,7 +138,7 @@ install_docker () {
     # Try the x86_64 installer first
     case $(uname -m) in
       x86_64|amd64) curl -fsSL "$compose_url/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;;
-      *) case "$os_release" in
+      aarch64|arm64) case "$os_release" in
           amzn) sudo yum install -y libffi libffi-devel openssl-devel python3 python3-pip python3-devel;
                 sudo pip3 install docker-compose;;
         esac;;
