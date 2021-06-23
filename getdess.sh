@@ -117,6 +117,7 @@ install_docker () {
 
   # docker-compose
   curl -fsSL "$compose_url-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  echo "TEST $?"
   chmod +x /usr/local/bin/docker-compose
   ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
   systemctl enable --now docker.service
