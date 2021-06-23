@@ -139,8 +139,8 @@ install_docker () {
     # Try the containerized installer
     if [[ $COMPOSE_RESULT -gt 0 ]]; then
       sudo curl -fsSL https://github.com/docker/compose/releases/download/1.29.2/run.sh -o /usr/local/bin/docker-compose
-      COMPOSE_RESULT=$?
-      if [[ $COMPOSE_RESULT -gt 0 ]]; then
+      COMPOSE_RESULT_2=$?
+      if [[ $COMPOSE_RESULT_2 -gt 0 ]]; then
         echo 'Error: unable to install docker compose'
         exit 51
       fi
