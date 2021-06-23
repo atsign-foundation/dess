@@ -30,7 +30,7 @@ redhat_releases='centos fedora amzn rhel'
 packages="curl openssl qrencode"
 
 # Docker compose link
-compose_url="https://github.com/docker/compose/releases/download/1.29.2/docker-compose"
+compose_url="https://github.com/docker/compose/releases/download/1.29.2"
 
 # Atsign user info
 user_info="atsign, secondaries account, atsign.com"
@@ -134,12 +134,12 @@ install_docker () {
   # docker-compose
   if ! command_exists docker-compose; then
     # Try the x86_64 installer first
-    curl -fsSL "$compose_url-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    curl -fsSL "$compose_url/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     echo 'Failed to install docker-compose, trying another installation method...'
     COMPOSE_RESULT=$?
     # Try the containerized installer
     if [[ $COMPOSE_RESULT -gt 0 ]]; then
-      sudo curl -fsSL https://github.com/docker/compose/releases/download/1.29.2/run.sh -o /usr/local/bin/docker-compose
+      sudo curl -fsSL "$compose_url/run.sh" -o /usr/local/bin/docker-compose
       COMPOSE_RESULT_2=$?
       if [[ $COMPOSE_RESULT_2 -gt 0 ]]; then
         echo 'Error: unable to install docker compose'
