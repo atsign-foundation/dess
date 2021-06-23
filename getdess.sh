@@ -7,11 +7,14 @@ set -m
 
 # Dependencies
 # openssl, qrencode, curl
-# docker, docker-compose, snapd
-# certbot (via snap)
+# docker, docker-compose
+# certbot
 
-# Container Dependencies
-# fuse squashfuse
+# Error Codes
+# 1 - Not running as root
+# 2 - Could not detect /etc/os-release ID
+# 30 - Docker daemon did not start ( in time )
+# 31 - Could not install docker-compose
 
 # SCRIPT GLOBALS
 
@@ -56,7 +59,7 @@ pre_install () {
   if [ -z "$os_release" ]
   then
       echo 'Error: Could not detect your distribution.'
-      exit 1
+      exit 2
   fi
   echo "Detected release id: $os_release, version: $os_id";
 
@@ -71,7 +74,7 @@ pre_install () {
       pkg_man='yum'
     fi
   else
-    echo 'Your distribution is not supported by this script.'
+    echo 'Your distribution is currently not supported by this script.'
     exit 0
   fi
   echo "Detected package manager: $pkg_man"
@@ -116,8 +119,20 @@ install_docker () {
   fi
 
   # docker-compose
-  curl -fsSL "$compose_url-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-  echo "TEST $?"
+  if ! command_exists docker-compose; then
+    # Try the x86_64 installer first
+    curl -fsSL "$compose_url-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    COMPOSE_RESULT=$?
+    # Try the containerized installer
+    if [[ $COMPOSE_RESULT -gt 0 ]]; then
+      sudo curl -fsSL https://github.com/docker/compose/releases/download/1.29.2/run.sh -o /usr/local/bin/docker-compose
+      COMPOSE_RESULT=$?
+      if [[ $COMPOSE_RESULT -gt 0 ]]; then
+        echo 'Error: unable to install docker compose'
+        exit 31
+      fi
+    fi
+  fi
   chmod +x /usr/local/bin/docker-compose
   ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
   systemctl enable --now docker.service
@@ -185,7 +200,7 @@ setup_docker () {
     if [[ $SECONDS -gt 120 ]]; then
       echo 'Error: Docker daemon is not starting...'
       echo 'Please check your docker installation before running again.'
-      exit 1
+      exit 30
     fi
   done
 
