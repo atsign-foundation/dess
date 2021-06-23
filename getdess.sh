@@ -29,7 +29,7 @@ redhat_releases='centos fedora amzn rhel'
 packages="curl openssl qrencode"
 
 # Docker compose link
-compose_url="https://github.com/docker/compose/releases/download/1.29.1"
+compose_url="https://github.com/docker/compose/releases/download/latest"
 
 # Atsign user info
 user_info="atsign, secondaries account, atsign.com"
@@ -121,7 +121,7 @@ install_docker () {
   # docker
   if ! command_exists docker; then
     case $os_release in
-      amzn) amazon-linux-extras install docker;;
+      amzn) amazon-linux-extras install docker docker-compose;;
       *) curl -fsSL https://get.docker.com | sh;;
     esac
   fi
@@ -131,7 +131,9 @@ install_docker () {
     # Try the x86_64 installer first
     case $(uname -m) in
       x86_64|amd64) curl -fsSL "$compose_url/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;;
-      *) $pkg_man -y install docker-compose;;
+      *) case "$os_release" in
+          amzn) sudo yum install -y libffi libffi-devel openssl-devel python3 python3-pip python3-devel;
+                sudo pip3 install docker-compose;;
     esac
     COMPOSE_RESULT=$?
     echo "$COMPOSE_RESULT"
