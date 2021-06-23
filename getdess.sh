@@ -91,10 +91,11 @@ install_dependencies () {
   for pkg in $packages; do
     if ! command_exists "$pkg"; then
       $pkg_man -y install "$pkg"
-    fi
-    if ! command_exists "pkg"; then
-      echo "Error: unable to install package $pkg"
-      exit 3
+      PKG_RESULT=$?
+      if [[ $PKG_RESULT -gt 0 ]]; then
+        echo "Error: unable to install package $pkg"
+        exit 3
+      fi
     fi
   done
 }
