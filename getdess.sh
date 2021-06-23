@@ -29,7 +29,7 @@ redhat_releases='centos fedora amzn rhel'
 packages="curl openssl qrencode"
 
 # Docker compose link
-compose_url="https://github.com/docker/compose/releases/download/1.29.2"
+compose_url="https://github.com/docker/compose/releases/download/1.29.1"
 
 # Atsign user info
 user_info="atsign, secondaries account, atsign.com"
