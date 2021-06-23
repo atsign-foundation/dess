@@ -66,8 +66,10 @@ pre_install () {
       echo 'Error: Could not detect your distribution.'
       exit 2
   fi
-  echo "Detected release id: $os_release, version: $os_id";
-
+  
+  echo "Detected release id: $os_release, version: $os_id"
+  echo "Detected architecture: $(uname -m)"
+  
   if ! is_release "$arch_support" "$(uname -m)"; then
     echo "Your architecture ($(uname -m)) is currently unsupported by this script."
     exit 0
