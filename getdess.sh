@@ -141,9 +141,10 @@ install_docker () {
     case $(uname -m) in
       x86_64|amd64) curl -fsSL "$compose_url/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;;
       aarch64|arm64) case "$os_release" in
-          amzn) sudo yum install -y libffi libffi-devel openssl-devel python3 python3-pip python3-devel;
-                sudo pip3 install docker-compose;;
-        esac;;
+          amzn) $pkg_man install -y libffi libffi-devel openssl-devel python3 python3-pip python3-devel;;
+                
+        esac;
+        pip3 install docker-compose;;
     esac
     COMPOSE_RESULT=$?
     echo "$COMPOSE_RESULT"
