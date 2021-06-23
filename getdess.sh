@@ -129,16 +129,14 @@ install_docker () {
   # docker-compose
   if ! command_exists docker-compose; then
     # Try the x86_64 installer first
-    curl -fsSL "$compose_url/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    case $(uname -m) in
+      x86_64|amd64) curl -fsSL "$compose_url/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;;
+      *) $pkg_man -y install docker-compose;;
+    esac
     COMPOSE_RESULT=$?
     echo "$COMPOSE_RESULT"
     # Try the containerized installer
     if [[ $COMPOSE_RESULT -gt 0 ]]; then
-      echo 'Failed to install docker-compose, trying another installation method...'
-      sudo curl -fsSL "$compose_url/run.sh" -o /usr/local/bin/docker-compose
-      COMPOSE_RESULT_2=$?
-      echo "$COMPOSE_RESULT_2"
-      if [[ $COMPOSE_RESULT_2 -gt 0 ]]; then
         echo 'Error: unable to install docker compose'
         exit 51
       fi
