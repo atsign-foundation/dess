@@ -13,7 +13,6 @@ set -m
 # Error Codes
 # 1  - Not running with root priveleges
 # 2  - Could not detect /etc/os-release ID
-# 3  - A dependency failed to install
 # 4  - certbot failed to install
 # 50 - docker daemon did not start ( in time )
 # 51 - docker-compose failed to install
@@ -91,11 +90,6 @@ install_dependencies () {
   for pkg in $packages; do
     if ! command_exists "$pkg"; then
       $pkg_man -y install "$pkg"
-      PKG_RESULT=$?
-      if [[ $PKG_RESULT -gt 0 ]]; then
-        echo "Error: unable to install package $pkg"
-        exit 3
-      fi
     fi
   done
 }
