@@ -137,6 +137,7 @@ install_docker () {
       echo 'Failed to install docker-compose, trying another installation method...'
       sudo curl -fsSL "$compose_url/run.sh" -o /usr/local/bin/docker-compose
       COMPOSE_RESULT_2=$?
+      echo "$COMPOSE_RESULT_2"
       if [[ $COMPOSE_RESULT_2 -gt 0 ]]; then
         echo 'Error: unable to install docker compose'
         exit 51
