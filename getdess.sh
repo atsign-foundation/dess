@@ -11,10 +11,14 @@ set -m
 # certbot
 
 # Error Codes
-# 1 - Not running as root
-# 2 - Could not detect /etc/os-release ID
-# 30 - Docker daemon did not start ( in time )
-# 31 - Could not install docker-compose
+# 1  - Not running with root priveleges
+# 2  - Could not detect /etc/os-release ID
+# 3  - A dependency failed to install
+# 4  - certbot failed to install
+# 50 - docker daemon did not start ( in time )
+# 51 - docker-compose failed to install
+# 52 - docker stack failed to deploy
+# 6  - A dess script failed to install 
 
 # SCRIPT GLOBALS
 
@@ -88,6 +92,10 @@ install_dependencies () {
     if ! command_exists "$pkg"; then
       $pkg_man -y install "$pkg"
     fi
+    if ! command_exists "pkg"; then
+      echo "Error: unable to install package $pkg"
+      exit 3
+    fi
   done
 }
 
@@ -107,6 +115,11 @@ install_certbot () {
   # Amazon Linux - 1.11.0
   # RHEL 8 - 1.14.0
   echo y | $pkg_man -y install certbot
+  CERTBOT_RESULT=$?
+  if [[ $CERTBOT_RESULT -gt 0 ]]; then
+    echo 'Error: unable to install certbot'
+    exit 4
+  fi
 }
 
 install_docker () {
@@ -129,7 +142,7 @@ install_docker () {
       COMPOSE_RESULT=$?
       if [[ $COMPOSE_RESULT -gt 0 ]]; then
         echo 'Error: unable to install docker compose'
-        exit 31
+        exit 51
       fi
     fi
   fi
@@ -200,20 +213,22 @@ setup_docker () {
     if [[ $SECONDS -gt 120 ]]; then
       echo 'Error: Docker daemon is not starting...'
       echo 'Please check your docker installation before running again.'
-      exit 30
+      exit 50
     fi
   done
 
   # give atsign user docker permissions
   usermod -aG docker atsign
 
-  # give user docker permissions
-  usermod -aG docker "$original_user"
-
   # setup and deploy the swarm as atsign
   docker swarm init
   docker network create -d overlay secondaries
   docker stack deploy -c /home/atsign/base/shepherd.yaml secondaries
+  STACK_RESULT=$?
+  if [[ $STACK_RESULT -gt 0 ]]; then
+    echo 'Error: Failed to deploy docker stack'
+    exit 52
+  fi
 }
 
 test_atsign_user () {
@@ -232,6 +247,11 @@ get_dess_scripts () {
   # to /usr/local/bin
   for script in $dess_scripts; do
     curl -fsSL "$repo_url"/"$script".sh -o /usr/local/bin/dess-"$script"
+    DESS_SCRIPT_RESULT=$?
+    if [[ $DESS_SCRIPT_RESULT -gt 0 ]]; then
+      echo "Error: failed to install dess-$script"
+      exit 6
+    fi
     chmod +x /usr/local/bin/dess-"$script"
     ln -s /usr/local/bin/dess-"$script" /usr/bin/dess-"$script"
   done
