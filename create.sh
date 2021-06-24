@@ -123,7 +123,11 @@ $sh_c "mkdir -p /home/atsign/atsign/$ATSIGN/storage"
 
 #     $sh_c docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-compose.yaml run  --service-ports cert
 $sh_c "/usr/bin/certbot certonly --standalone --domains $FQDN --non-interactive --agree-tos -m $EMAIL"
-
+CERTBOT_RESULT=$?
+if [[ $CERTBOT_RESULT -gt 0 ]]
+    echo 'Error: certbot failed to get a certificate.'
+    exit 1
+fi
 # Last task to put in place the restart script and regenerate the ssl root CA file (as root)
 # Root CA
 $sh_c "curl -L -o  /home/atsign/atsign/etc/live/$FQDN/cacert.pem https://curl.se/ca/cacert.pem"
