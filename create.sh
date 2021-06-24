@@ -95,8 +95,8 @@ echo "PORT=$PORT" |sudo tee -a  ~atsign/dess/$ATSIGN/.env
 echo "EMAIL=$EMAIL" |sudo tee -a  ~atsign/dess/$ATSIGN/.env
 echo "SECRET=$SECRET" |sudo tee -a  ~atsign/dess/$ATSIGN/.env
 # copy over the .env file to base so we can renew the certs with an up to date EMAIL
-sudo cp ~atsign/dess/$ATSIGN/.env ~atsign/base/
-sudo chmod 664 ~atsign/base/.env
+sudo cp /home/atsign/dess/$ATSIGN/.env /home/atsign/base/
+sudo chmod 664 /home/atsign/base/.env
 # Get the certificate for the @sign
     tput setaf 2
     echo "Getting certificates"
@@ -109,12 +109,12 @@ sudo certbot certonly --standalone --domains ${FQDN} --non-interactive --agree-t
 # Root CA
 sudo curl -L -o  ~atsign/atsign/etc/live/$FQDN/cacert.pem https://curl.se/ca/cacert.pem
 # Put some ownership in place so atsign can read the certs
-sudo chown -R atsign:atsign ~atsign/atsign/$ATSIGN
-sudo chown -R atsign:atsign ~atsign/atsign/etc/live/$FQDN
-sudo chown -R atsign:atsign ~atsign/atsign/etc/archive/$FQDN
-sudo chown -R atsign:atsign ~atsign/dess/$ATSIGN
+sudo chown -R atsign:atsign /home/atsign/atsign/$ATSIGN
+sudo chown -R atsign:atsign /home/atsign/atsign/etc/live/$FQDN
+sudo chown -R atsign:atsign /home/atsign/atsign/etc/archive/$FQDN
+sudo chown -R atsign:atsign /home/atsign/dess/$ATSIGN
 # Copy over restart script
-sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
+sudo cp base/restart.sh /home/atsign/atsign/etc/renewal-hooks/deploy
 #
 #
 # We are now ready to start the secondary !
@@ -124,8 +124,8 @@ sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
 # we use a neat trick usign docker-compose to create the compose file for us.
     echo Starting secondary for $ATSIGN at $FQDN on port $PORT as $DNAME on Docker
 
-sudo docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-swarm.yaml config | sudo -u atsign tee ~atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null
-sudo docker stack deploy -c ~atsign/dess/$ATSIGN/docker-compose.yaml $SERVICE
+sudo docker-compose --env-file /home/atsign/dess/$ATSIGN/.env -f /home/atsign/dess/$ATSIGN/docker-swarm.yaml config | sudo -u atsign tee /home/atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null
+sudo docker stack deploy -c /home/atsign/dess/$ATSIGN/docker-compose.yaml $SERVICE
      echo Your QR-Code for $ATSIGN
      tput setaf 9
 qrencode -t ANSIUTF8 "${ATSIGN}:${SECRET}"
