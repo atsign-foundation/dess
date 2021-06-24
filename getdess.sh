@@ -105,7 +105,7 @@ install_dependencies () {
 
 install_certbot () {
   case "$os_release" in
-    centos) echo y | $pkg_man -y install epel-release;;
+    centos|rocky) echo y | $pkg_man -y install epel-release;;
     amzn) echo y | amazon-linux-extras install epel;;
     rhel) echo y | $pkg_man -y install "https://dl.fedoraproject.org/pub/epel/epel-release-latest-$($os_id | awk -F. '{print $1}').noarch.rpm";;
     *);;
