@@ -265,6 +265,11 @@ get_dess_scripts () {
   done
 }
 
+post_install() {
+  echo;
+  echo 'Dess installed, please move on to the dess-create command.'
+}
+
 do_install () {
   pre_install
 
@@ -281,6 +286,8 @@ do_install () {
   setup_docker
   test_atsign_user
   get_dess_scripts
+  
+  post_install
 }
 
 do_install
