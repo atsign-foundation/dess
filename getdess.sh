@@ -110,14 +110,7 @@ install_certbot () {
     rhel) echo y | $pkg_man -y install "https://dl.fedoraproject.org/pub/epel/epel-release-latest-$($os_id | awk -F. '{print $1}').noarch.rpm";;
     *);;
   esac
-  # Versions using this approach
-  # Ubuntu 20.10 - 1.7.0
-  # Debian 10 - 0.31.0
-  # Fedora 34 - 1.14.0
-  # Centos 7 - 1.11.0
-  # Centos 8 - 1.14.0
-  # Amazon Linux - 1.11.0
-  # RHEL 8 - 1.14.0
+
   echo y | $pkg_man -y install certbot
   CERTBOT_RESULT=$?
   if [[ $CERTBOT_RESULT -gt 0 ]]; then
