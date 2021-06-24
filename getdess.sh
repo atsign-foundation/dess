@@ -23,7 +23,7 @@ set -m
 
 # Supported distros by type
 debian_releases='ubuntu debian'
-redhat_releases='centos fedora amzn rhel'
+redhat_releases='centos fedora amzn rhel rocky'
 
 arch_support='x86_64 amd64 aarch64 arm64'
 
@@ -58,8 +58,8 @@ is_release () { [[ $1 =~ (^|[[:space:]])$2($|[[:space:]]) ]]; }
 
 pre_install () {
   # Get the user's release
-  os_release=$(awk -F= '/^ID=/{print $2}' /etc/os-release | sed 's/\"//g')
-  os_id=$(awk -F= '/^VERSION_ID=/{print $2}' /etc/os-release | sed 's/\"//g')
+  os_release=$(. /etc/os-release; echo $ID)
+  os_id=$(. /etc/os-release; echo $VERSION_ID)
 
   if [ -z "$os_release" ]
   then
