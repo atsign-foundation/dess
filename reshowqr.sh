@@ -1,7 +1,7 @@
 #!/bin/bash
 if [[ $# -eq 0 || $# -gt 1 ]] ; then
-    echo 'Usage reshow.sh <@sign>'
-    echo "Example ./reshowqr.sh @bob"
+    echo 'Usage dess-reshowqr <@sign>'
+    echo "Example dess-reshowqr @bob"
     exit 1 
 fi
 if [[ ! -f ~atsign/dess/$1/.env ]]
