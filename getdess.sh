@@ -31,7 +31,7 @@ arch_support='x86_64 amd64 aarch64 arm64'
 packages="curl openssl qrencode"
 
 # Docker compose link
-compose_url="https://github.com/docker/compose/releases/download/latest"
+compose_url="https://github.com/docker/compose/releases/download/1.29.2"
 
 # Atsign user info
 user_info="atsign, secondaries account, atsign.com"
