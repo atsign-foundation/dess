@@ -1,8 +1,8 @@
 #!/bin/bash
 
 if [[ $# -eq 0 || $# -gt 5 ]] ; then
-    echo 'Usage dess-create <@sign> <fqdn> <port> <email> <service>'
-    echo "Example dess-create @bob bob.example.com 6464 bob@example.com bob"
+    echo 'Usage sudo dess-create <@sign> <fqdn> <port> <email> <service>'
+    echo "Example sudo dess-create @bob bob.example.com 6464 bob@example.com bob"
     exit 0
 fi
 
