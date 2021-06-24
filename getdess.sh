@@ -132,10 +132,10 @@ install_docker () {
     case $os_release in
       amzn) amazon-linux-extras install docker;;
       rocky)
-        sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo;
-        sudo dnf -y update;
-        sudo dnf install docker-ce docker-ce-cli containerd.io;
-        sudo systemctl enable --now docker.service;
+        dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo;
+        dnf -y update;
+        dnf -y install docker-ce docker-ce-cli containerd.io;
+        systemctl enable --now docker.service;
       ;;
       *) curl -fsSL https://get.docker.com | sh;;
     esac
