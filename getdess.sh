@@ -207,6 +207,7 @@ setup_atsign_user () {
   done
 
   chown atsign:atsign /home/atsign
+  
 }
 
 setup_docker () {
@@ -260,7 +261,7 @@ get_dess_scripts () {
       echo "Error: failed to install dess-$script"
       exit 6
     fi
-    chmod +x /usr/local/bin/dess-"$script"
+    chmod 774 /usr/local/bin/dess-"$script"
     ln -s /usr/local/bin/dess-"$script" /usr/bin/dess-"$script"
   done
 }
