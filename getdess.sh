@@ -154,6 +154,7 @@ install_docker () {
       exit 51
     fi
   fi
+  chown root:docker /usr/local/bin/docker-compose
   chmod +x /usr/local/bin/docker-compose
   ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
   systemctl enable --now docker.service
@@ -162,13 +163,13 @@ install_docker () {
 mkdir_atsign () {
   mkdir -p "$1"
   echo "making $1"
-  chown atsign "$1"
+  chown atsign:atsign "$1"
 }
 
 curl_atsign_file () {
   curl -fsSL "$repo_url/$1" -o "/home/atsign/$1"
   echo "curling $1"
-  chown atsign "/home/atsign/$1"
+  chown atsign:atsign "/home/atsign/$1"
 }
 
 setup_atsign_user () {
