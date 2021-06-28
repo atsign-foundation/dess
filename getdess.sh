@@ -37,7 +37,7 @@ compose_url="https://github.com/docker/compose/releases/download/1.29.2"
 user_info="atsign, secondaries account, atsign.com"
 
 # Atsign directories
-atsign_dirs="/home/atsign/dess /home/atsign/base /home/atsign/atsign/var /home/atsign/atsign/etc /home/atsign/atsign/logs"
+atsign_dirs="/home/atsign/dess /home/atsign/base /home/atsign/atsign/var /home/atsign/atsign/etc /home/atsign/atsign/logs /home/atsign/tmp"
 
 # Repository files
 repo_url="https://raw.githubusercontent.com/xavierchanth/dess/curl-testing"
