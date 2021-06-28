@@ -146,7 +146,7 @@ $sh_c "cp /home/atsign/base/restart.sh /home/atsign/atsign/etc/renewal-hooks/dep
 # we use a neat trick using docker-compose to create the compose file for us.
 change_sh 'atsign'
     echo Starting secondary for "$ATSIGN" at "$FQDN" on port "$PORT" as "$DNAME" on Docker
-$sh_c "export TMPDIR=$HOME/tmp; /usr/bin/docker-compose --env-file /home/atsign/dess/$ATSIGN/.env -f /home/atsign/dess/$ATSIGN/docker-swarm.yaml config | tee /home/atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null;"
+$sh_c "export TMPDIR=/home/atsign/tmp; /usr/bin/docker-compose --env-file /home/atsign/dess/$ATSIGN/.env -f /home/atsign/dess/$ATSIGN/docker-swarm.yaml config | tee /home/atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null;"
 $sh_c "/usr/bin/docker stack deploy -c /home/atsign/dess/$ATSIGN/docker-compose.yaml $SERVICE"
     echo Your QR-Code for "$ATSIGN"
     tput setaf 9
