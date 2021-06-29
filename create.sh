@@ -1,7 +1,8 @@
 #!/bin/bash
+
 if [[ $# -eq 0 || $# -gt 5 ]] ; then
-    echo 'Usage create.sh <@sign> <fqdn> <port> <email> <service>'
-    echo "Example create.sh @bob bob.example.com 6464 bob@example.com bob"
+    echo 'Usage sudo dess-create <@sign> <fqdn> <port> <email> <service>'
+    echo "Example sudo dess-create @bob bob.example.com 6464 bob@example.com bob"
     exit 0
 fi
 
@@ -13,7 +14,7 @@ export env SERVICE=$5
 
 # Let's make a secret whilst we are here !
 # hashalot should have been installed by now
-export env SECRET=`head -30 /dev/urandom |hashalot -x sha512`
+export env SECRET=$(head -30 /dev/urandom | openssl sha512 | awk -F'= ' '{print $2}')
 
 # Check that we have an @ in the @sign
 if [[ ! $ATSIGN  =~ ^@.*$ ]]
@@ -70,46 +71,72 @@ then
     exit 1
 fi
 
-# Confirm arguments look valid
-    tput setaf 2
-    echo "Creating $ATSIGN with $FQDN:$PORT with email $EMAIL with docker service name of $SERVICE"
-    tput setaf 9
+command_exists () {
+    command -v "$@" > /dev/null 2>&1
+}
 
+sh_c=''
+change_sh () {
+    if command_exists sudo; then
+        sh_c="sudo -u $1 sh -c"
+    elif command_exists su; then
+        sh_c="su -l $1 -c"
+    else
+        echo 'Error: unable to perform operations as atsign user';
+        exit 1
+    fi
+}
+
+
+# Confirm arguments look valid
+tput setaf 2
+echo "Creating $ATSIGN with $FQDN:$PORT with email $EMAIL with docker service name of $SERVICE"
+tput setaf 9
+
+
+change_sh 'atsign'
 
 # Copy files in from base
-sudo -u atsign mkdir -p ~atsign/dess/$ATSIGN
-sudo -u atsign cp  base/.env ~atsign/dess/$ATSIGN
-sudo -u atsign cp  base/docker-swarm.yaml ~atsign/dess/$ATSIGN
-# Make the directories in atsign
-sudo -u atsign mkdir -p ~atsign/atsign/$ATSIGN/storage
+$sh_c "mkdir -p /home/atsign/dess/$ATSIGN"
+$sh_c "cp /home/atsign/base/.env /home/atsign/dess/$ATSIGN"
+$sh_c "cp /home/atsign/base/docker-swarm.yaml /home/atsign/dess/$ATSIGN"
 # Make the edits to the .env file
 # First comment out everything
-sudo -u atsign sed -i 's/^\([^#].*\)/# \1/g' ~atsign/dess/$ATSIGN/.env
+$sh_c "sed -i 's/^\([^#].*\)/# \1/g' /home/atsign/dess/$ATSIGN/.env"
 # Add the environment variables we need
-echo "ATSIGN=$ATSIGN" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
-echo "DOMAIN=$FQDN" |sudo -u atsign tee -a ~atsign/dess/$ATSIGN/.env
-echo "PORT=$PORT" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
-echo "EMAIL=$EMAIL" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
-echo "SECRET=$SECRET" |sudo -u atsign tee -a  ~atsign/dess/$ATSIGN/.env
+$sh_c "echo ATSIGN=$ATSIGN | tee -a /home/atsign/dess/$ATSIGN/.env"
+$sh_c "echo DOMAIN=$FQDN | tee -a /home/atsign/dess/$ATSIGN/.env"
+$sh_c "echo PORT=$PORT | tee -a /home/atsign/dess/$ATSIGN/.env"
+$sh_c "echo EMAIL=$EMAIL | tee -a /home/atsign/dess/$ATSIGN/.env"
+$sh_c "echo SECRET=$SECRET | tee -a /home/atsign/dess/$ATSIGN/.env"
 # copy over the .env file to base so we can renew the certs with an up to date EMAIL
-sudo -u atsign cp  ~atsign/dess/$ATSIGN/.env ~atsign/base/
+$sh_c "cp /home/atsign/dess/$ATSIGN/.env /home/atsign/base/"
 # Get the certificate for the @sign
-    tput setaf 2
-    echo "Getting certificates"
-    tput setaf 9
+tput setaf 2
+echo "Getting certificates"
+tput setaf 9
 
-#     sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-compose.yaml run  --service-ports cert
-sudo certbot certonly --standalone --domains ${FQDN} --non-interactive --agree-tos -m ${EMAIL}
+change_sh 'root'
 
+# Make the directories in atsign
+$sh_c "mkdir -p /home/atsign/atsign/$ATSIGN/storage"
+
+#     $sh_c docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-compose.yaml run  --service-ports cert
+$sh_c "/usr/bin/certbot certonly --standalone --domains $FQDN --non-interactive --agree-tos -m $EMAIL"
+CERTBOT_RESULT=$?
+if [[ $CERTBOT_RESULT -gt 0 ]]; then
+    echo 'Error: certbot failed to get a certificate.'
+    exit 1
+fi
 # Last task to put in place the restart script and regenerate the ssl root CA file (as root)
 # Root CA
-sudo curl -L -o  ~atsign/atsign/etc/live/$FQDN/cacert.pem https://curl.se/ca/cacert.pem
+$sh_c "curl -L -o  /home/atsign/atsign/etc/live/$FQDN/cacert.pem https://curl.se/ca/cacert.pem"
 # Put some ownership in place so atsign can read the certs
-sudo chown -R atsign:atsign ~atsign/atsign/$ATSIGN
-sudo chown -R atsign:atsign ~atsign/atsign/etc/live/$FQDN
-sudo chown -R atsign:atsign ~atsign/atsign/etc/archive/$FQDN
+$sh_c "chown -R atsign:atsign /home/atsign/atsign/$ATSIGN"
+$sh_c "chown -R atsign:atsign /home/atsign/atsign/etc/live/$FQDN"
+$sh_c "chown -R atsign:atsign /home/atsign/atsign/etc/archive/$FQDN"
 # Copy over restart script
-sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
+$sh_c "cp /home/atsign/base/restart.sh /home/atsign/atsign/etc/renewal-hooks/deploy"
 #
 #
 # We are now ready to start the secondary !
@@ -117,10 +144,11 @@ sudo cp base/restart.sh ~atsign/atsign/etc/renewal-hooks/deploy
 # It would be nice to use the @sign for the name but
 # Docker insists on a name that is DNS compliant and so emojis and @ signs are out hence the $SERVICE tag
 # we use a neat trick using docker-compose to create the compose file for us.
-    echo Starting secondary for $ATSIGN at $FQDN on port $PORT as $DNAME on Docker
-sudo -u atsign docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-swarm.yaml config | sudo -u atsign tee ~atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null
-sudo -u atsign docker stack deploy -c ~atsign/dess/$ATSIGN/docker-compose.yaml $SERVICE
-     echo Your QR-Code for $ATSIGN
-     tput setaf 9
+change_sh 'atsign'
+    echo Starting secondary for "$ATSIGN" at "$FQDN" on port "$PORT" as "$DNAME" on Docker
+$sh_c "export TMPDIR=/home/atsign/tmp; /usr/bin/docker-compose --env-file /home/atsign/dess/$ATSIGN/.env -f /home/atsign/dess/$ATSIGN/docker-swarm.yaml config | tee /home/atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null;"
+$sh_c "/usr/bin/docker stack deploy -c /home/atsign/dess/$ATSIGN/docker-compose.yaml $SERVICE"
+    echo Your QR-Code for "$ATSIGN"
+    tput setaf 9
 qrencode -t ANSIUTF8 "${ATSIGN}:${SECRET}"
 
