@@ -24,7 +24,7 @@
   ```
 - Install the software and follow the prompts to install the atsign user
   ```
-  curl -fsSL getdess.atsign.com | sudo bash
+  curl -fsSL https://getdess.atsign.com | sudo bash
   ```
 - Create a secondary, using the dess-create script and follow the instructions
   ```
