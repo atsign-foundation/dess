@@ -24,11 +24,11 @@
   ```
 - Install the software and follow the prompts to install the atsign user
   ```
-  curl -fsSL https://raw.githubusercontent.com/atsign-foundation/dess/trunk/getdess.sh | sudo bash
+  curl -fsSL getdess.atsign.com | sudo bash
   ```
-- Create a secondary, using the create.sh script and follow the instructions
+- Create a secondary, using the dess-create script and follow the instructions
   ```
-  dess-create
+  sudo dess-create
   ```
 - If you need to see the QR code again for an @sign then run:
   ```
