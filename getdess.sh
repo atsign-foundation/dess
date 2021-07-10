@@ -9,7 +9,7 @@ set -m
 debian_releases='ubuntu debian raspbian'
 redhat_releases='centos fedora amzn rhel rocky'
 
-arch_support='x86_64 amd64 aarch64 arm64 armv71'
+arch_support='x86_64 amd64 aarch64 arm64 armv7l'
 
 # Required base packages
 packages="curl openssl qrencode"
