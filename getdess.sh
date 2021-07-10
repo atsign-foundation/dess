@@ -184,17 +184,17 @@ setup_atsign_user () {
     rm /etc/letsencrypt/*
     rmdir /etc/letsencrypt/
     ln -s /home/atsign/atsign/etc /etc/letsencrypt
-    tput setaf 9
+    tput setaf 7
   else
     tput setaf 1
     echo 'saved you from destroying letsencrypt by running the script again :-)'
-    tput setaf 9
+    tput setaf 7
   fi
 
   # make ~atsign directories
   tput setaf 2
   echo "Creating some base directories for atsign"
-  tput setaf 9
+  tput setaf 7
   for directory in $atsign_dirs; do
     mkdir_atsign "$directory"
   done
