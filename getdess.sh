@@ -3,23 +3,7 @@
 # Enable job control
 set -m
 
-# Dess installation
-
-# Dependencies
-# openssl, qrencode, curl
-# docker, docker-compose
-# certbot
-
-# Error Codes
-# 1  - Not running with root priveleges
-# 2  - Could not detect /etc/os-release ID
-# 4  - certbot failed to install
-# 50 - docker daemon did not start ( in time )
-# 51 - docker-compose failed to install
-# 52 - docker stack failed to deploy
-# 6  - A dess script failed to install
-
-# SCRIPT GLOBALS
+#* START SCRIPT GLOBALS
 
 # Supported distros by type
 debian_releases='ubuntu debian raspbian'
@@ -44,6 +28,24 @@ repo_url="https://raw.githubusercontent.com/atsign-foundation/dess/trunk"
 atsign_files="base/.env base/docker-swarm.yaml base/setup.sh base/shepherd.yaml base/restart.sh"
 dess_scripts="create reshowqr"
 
+#* END SCRIPT GLOBALS
+
+error_exit() {
+  exit_msg=""
+  case "$1" in
+    1)exit_msg="Not running with root priveleges";;
+    2)exit_msg="Could not detect /etc/os-release ID";;
+    4)exit_msg="certbot failed to install";;
+    50)exit_msg="docker daemon failed to start ( in time )";;
+    51)exit_msg="docker-compose failed to install";;
+    52)exit_msg="docker stack failed to deploy";;
+    6)exit_msg="A dess script failed to install";;
+    *);;
+  esac
+  echo "$exit_msg"
+  exit "$1"
+}
+
 command_exists () {
   command -v "$@" > /dev/null 2>&1
 }
@@ -61,7 +63,7 @@ pre_install () {
   if [ -z "$os_release" ]
   then
       echo 'Error: Could not detect your distribution.'
-      exit 2
+      error_exit 2
   fi
 
   echo "Detected release id: $os_release, version: $os_id"
@@ -112,7 +114,7 @@ install_certbot () {
   CERTBOT_RESULT=$?
   if [[ $CERTBOT_RESULT -gt 0 ]]; then
     echo 'Error: unable to install certbot'
-    exit 4
+    error_exit 4
   fi
 }
 
@@ -135,7 +137,7 @@ install_docker () {
   if ! command_exists docker-compose; then
     case $(uname -m) in
       x86_64|amd64) curl -fsSL "$compose_url/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;;
-      aarch64|arm64|armv71)
+      *)
         case "$os_release" in
           amzn) $pkg_man install -y libffi libffi-devel openssl-devel python3 python3-pip python3-devel gcc;;
           *) $pkg_man install -y python3 python3-pip;;
@@ -147,7 +149,7 @@ install_docker () {
     echo "$COMPOSE_RESULT"
     if [[ $COMPOSE_RESULT -gt 0 ]]; then
       echo 'Error: unable to install docker compose'
-      exit 51
+      error_exit 51
     fi
     chown root:docker /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
@@ -218,7 +220,7 @@ setup_docker () {
     if [[ $SECONDS -gt 120 ]]; then
       echo 'Error: Docker daemon is not starting...'
       echo 'Please check your docker installation before running again.'
-      exit 50
+      error_exit 50
     fi
   done
 
@@ -232,7 +234,7 @@ setup_docker () {
   STACK_RESULT=$?
   if [[ $STACK_RESULT -gt 0 ]]; then
     echo 'Error: Failed to deploy docker stack'
-    exit 52
+    error_exit 52
   fi
 }
 
@@ -255,7 +257,7 @@ get_dess_scripts () {
     DESS_SCRIPT_RESULT=$?
     if [[ $DESS_SCRIPT_RESULT -gt 0 ]]; then
       echo "Error: failed to install dess-$script"
-      exit 6
+      error_exit 6
     fi
     chmod 774 /usr/local/bin/dess-"$script"
     ln -s /usr/local/bin/dess-"$script" /usr/bin/dess-"$script"
@@ -273,7 +275,7 @@ do_install () {
   if [[ $EUID -ne 0 ]]; then
     echo 'Error: unable to perform root operations';
     echo 'Please run this script as root to complete installation.';
-    exit 1
+    error_exit 1
   fi
 
   install_dependencies
