@@ -22,7 +22,7 @@ set -m
 # SCRIPT GLOBALS
 
 # Supported distros by type
-debian_releases='ubuntu debia raspian'
+debian_releases='ubuntu debian raspbian'
 redhat_releases='centos fedora amzn rhel rocky'
 
 arch_support='x86_64 amd64 aarch64 arm64 armv71'
