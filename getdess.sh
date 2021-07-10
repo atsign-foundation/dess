@@ -145,14 +145,13 @@ install_docker () {
     esac
     COMPOSE_RESULT=$?
     echo "$COMPOSE_RESULT"
-    # Try the containerized installer
     if [[ $COMPOSE_RESULT -gt 0 ]]; then
       echo 'Error: unable to install docker compose'
       exit 51
     fi
+    chown root:docker /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
   fi
-  chown root:docker /usr/local/bin/docker-compose
-  chmod +x /usr/local/bin/docker-compose
   ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
   systemctl enable --now docker.service
 }
