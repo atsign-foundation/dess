@@ -17,15 +17,15 @@ set -m
 # 50 - docker daemon did not start ( in time )
 # 51 - docker-compose failed to install
 # 52 - docker stack failed to deploy
-# 6  - A dess script failed to install 
+# 6  - A dess script failed to install
 
 # SCRIPT GLOBALS
 
 # Supported distros by type
-debian_releases='ubuntu debian'
+debian_releases='ubuntu debia raspian'
 redhat_releases='centos fedora amzn rhel rocky'
 
-arch_support='x86_64 amd64 aarch64 arm64'
+arch_support='x86_64 amd64 aarch64 arm64 armv71'
 
 # Required base packages
 packages="curl openssl qrencode"
