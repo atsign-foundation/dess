@@ -135,7 +135,7 @@ install_docker () {
   if ! command_exists docker-compose; then
     case $(uname -m) in
       x86_64|amd64) curl -fsSL "$compose_url/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;;
-      aarch64|arm64)
+      aarch64|arm64|armv71)
         case "$os_release" in
           amzn) $pkg_man install -y libffi libffi-devel openssl-devel python3 python3-pip python3-devel gcc;;
           *) $pkg_man install -y python3 python3-pip;;
