@@ -44,9 +44,6 @@ repo_url="https://raw.githubusercontent.com/atsign-foundation/dess/trunk"
 atsign_files="base/.env base/docker-swarm.yaml base/setup.sh base/shepherd.yaml base/restart.sh"
 dess_scripts="create reshowqr"
 
-# Original user
-original_user=$USER
-
 command_exists () {
   command -v "$@" > /dev/null 2>&1
 }
@@ -58,18 +55,18 @@ is_release () { [[ $1 =~ (^|[[:space:]])$2($|[[:space:]]) ]]; }
 
 pre_install () {
   # Get the user's release
-  os_release=$(. /etc/os-release; echo $ID)
-  os_id=$(. /etc/os-release; echo $VERSION_ID)
+  os_release=$(. /etc/os-release; echo "$ID")
+  os_id=$(. /etc/os-release; echo "$VERSION_ID")
 
   if [ -z "$os_release" ]
   then
       echo 'Error: Could not detect your distribution.'
       exit 2
   fi
-  
+
   echo "Detected release id: $os_release, version: $os_id"
   echo "Detected architecture: $(uname -m)"
-  
+
   if ! is_release "$arch_support" "$(uname -m)"; then
     echo "Your architecture ($(uname -m)) is currently unsupported by this script."
     exit 0
@@ -138,7 +135,7 @@ install_docker () {
   if ! command_exists docker-compose; then
     case $(uname -m) in
       x86_64|amd64) curl -fsSL "$compose_url/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;;
-      aarch64|arm64) 
+      aarch64|arm64)
         case "$os_release" in
           amzn) $pkg_man install -y libffi libffi-devel openssl-devel python3 python3-pip python3-devel gcc;;
           *) $pkg_man install -y python3 python3-pip;;
@@ -208,7 +205,6 @@ setup_atsign_user () {
   done
 
   chown atsign:atsign /home/atsign
-  
 }
 
 setup_docker () {
@@ -269,7 +265,7 @@ get_dess_scripts () {
 
 post_install() {
   echo;
-  echo 'Dess installed, please move on to the dess-create command.'
+  echo 'Dess installed, please move on to the sudo dess-create command.'
 }
 
 do_install () {
@@ -288,7 +284,7 @@ do_install () {
   setup_docker
   test_atsign_user
   get_dess_scripts
-  
+
   post_install
 }
 
