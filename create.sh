@@ -21,7 +21,7 @@ if [[ ! $ATSIGN  =~ ^@.*$ ]]
 then
     tput setaf 1
     echo "include @ in @sign"
-    tput setaf 9
+    tput setaf 7
     exit 1
 fi
 # Check that we have at least one . in the FQDN
@@ -29,7 +29,7 @@ if [[ ! $FQDN  =~  ^.*\..*$ ]]
 then
     tput setaf 1
     echo "include . in fqdn"
-    tput setaf 9
+    tput setaf 7
     exit 1
 fi
 
@@ -38,7 +38,7 @@ if [[ ! (($PORT -gt 1024) && ($PORT -lt 65535)) ]]
 then
     tput setaf 1
     echo "Port number not in range 1024-65535"
-    tput setaf 9
+    tput setaf 7
     exit 1
 fi
 
@@ -49,7 +49,7 @@ if [[ $OPEN -eq 0 ]]
 then
     tput setaf 1
     echo "Port number is in use"
-    tput setaf 9
+    tput setaf 7
     exit 1
 fi
 
@@ -58,7 +58,7 @@ if [[ ! "$EMAIL" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$ ]]
 then
     tput setaf 1
     echo "Invalid email address"
-    tput setaf 9
+    tput setaf 7
     exit 1
 fi
 
@@ -67,7 +67,7 @@ if [[ ! "$SERVICE" =~ ^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9]))$ ]]
 then
     tput setaf 1
     echo "Invalid service name must comply with DNS for docker service name"
-    tput setaf 9
+    tput setaf 7
     exit 1
 fi
 
@@ -91,7 +91,7 @@ change_sh () {
 # Confirm arguments look valid
 tput setaf 2
 echo "Creating $ATSIGN with $FQDN:$PORT with email $EMAIL with docker service name of $SERVICE"
-tput setaf 9
+tput setaf 7
 
 
 change_sh 'atsign'
@@ -114,7 +114,7 @@ $sh_c "cp /home/atsign/dess/$ATSIGN/.env /home/atsign/base/"
 # Get the certificate for the @sign
 tput setaf 2
 echo "Getting certificates"
-tput setaf 9
+tput setaf 7
 
 change_sh 'root'
 
@@ -149,6 +149,6 @@ change_sh 'atsign'
 $sh_c "export TMPDIR=/home/atsign/tmp; /usr/bin/docker-compose --env-file /home/atsign/dess/$ATSIGN/.env -f /home/atsign/dess/$ATSIGN/docker-swarm.yaml config | tee /home/atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null;"
 $sh_c "/usr/bin/docker stack deploy -c /home/atsign/dess/$ATSIGN/docker-compose.yaml $SERVICE"
     echo Your QR-Code for "$ATSIGN"
-    tput setaf 9
+    tput setaf 7
 qrencode -t ANSIUTF8 "${ATSIGN}:${SECRET}"
 

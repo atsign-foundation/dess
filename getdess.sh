@@ -3,29 +3,13 @@
 # Enable job control
 set -m
 
-# Dess installation
-
-# Dependencies
-# openssl, qrencode, curl
-# docker, docker-compose
-# certbot
-
-# Error Codes
-# 1  - Not running with root priveleges
-# 2  - Could not detect /etc/os-release ID
-# 4  - certbot failed to install
-# 50 - docker daemon did not start ( in time )
-# 51 - docker-compose failed to install
-# 52 - docker stack failed to deploy
-# 6  - A dess script failed to install 
-
-# SCRIPT GLOBALS
+#* START SCRIPT GLOBALS
 
 # Supported distros by type
-debian_releases='ubuntu debian'
+debian_releases='ubuntu debian raspbian'
 redhat_releases='centos fedora amzn rhel rocky'
 
-arch_support='x86_64 amd64 aarch64 arm64'
+arch_support='x86_64 amd64 aarch64 arm64 armv7l'
 
 # Required base packages
 packages="curl openssl qrencode"
@@ -44,8 +28,23 @@ repo_url="https://raw.githubusercontent.com/atsign-foundation/dess/trunk"
 atsign_files="base/.env base/docker-swarm.yaml base/setup.sh base/shepherd.yaml base/restart.sh"
 dess_scripts="create reshowqr"
 
-# Original user
-original_user=$USER
+#* END SCRIPT GLOBALS
+
+error_exit() {
+  exit_msg=""
+  case "$1" in
+    1)exit_msg="Not running with root priveleges";;
+    2)exit_msg="Could not detect /etc/os-release ID";;
+    4)exit_msg="certbot failed to install";;
+    50)exit_msg="docker daemon failed to start ( in time )";;
+    51)exit_msg="docker-compose failed to install";;
+    52)exit_msg="docker stack failed to deploy";;
+    6)exit_msg="A dess script failed to install";;
+    *);;
+  esac
+  echo "$exit_msg"
+  exit "$1"
+}
 
 command_exists () {
   command -v "$@" > /dev/null 2>&1
@@ -58,18 +57,18 @@ is_release () { [[ $1 =~ (^|[[:space:]])$2($|[[:space:]]) ]]; }
 
 pre_install () {
   # Get the user's release
-  os_release=$(. /etc/os-release; echo $ID)
-  os_id=$(. /etc/os-release; echo $VERSION_ID)
+  os_release=$(. /etc/os-release; echo "$ID")
+  os_id=$(. /etc/os-release; echo "$VERSION_ID")
 
   if [ -z "$os_release" ]
   then
       echo 'Error: Could not detect your distribution.'
-      exit 2
+      error_exit 2
   fi
-  
+
   echo "Detected release id: $os_release, version: $os_id"
   echo "Detected architecture: $(uname -m)"
-  
+
   if ! is_release "$arch_support" "$(uname -m)"; then
     echo "Your architecture ($(uname -m)) is currently unsupported by this script."
     exit 0
@@ -115,7 +114,7 @@ install_certbot () {
   CERTBOT_RESULT=$?
   if [[ $CERTBOT_RESULT -gt 0 ]]; then
     echo 'Error: unable to install certbot'
-    exit 4
+    error_exit 4
   fi
 }
 
@@ -138,7 +137,7 @@ install_docker () {
   if ! command_exists docker-compose; then
     case $(uname -m) in
       x86_64|amd64) curl -fsSL "$compose_url/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;;
-      aarch64|arm64) 
+      *)
         case "$os_release" in
           amzn) $pkg_man install -y libffi libffi-devel openssl-devel python3 python3-pip python3-devel gcc;;
           *) $pkg_man install -y python3 python3-pip;;
@@ -148,14 +147,13 @@ install_docker () {
     esac
     COMPOSE_RESULT=$?
     echo "$COMPOSE_RESULT"
-    # Try the containerized installer
     if [[ $COMPOSE_RESULT -gt 0 ]]; then
       echo 'Error: unable to install docker compose'
-      exit 51
+      error_exit 51
     fi
+    chown root:docker /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
   fi
-  chown root:docker /usr/local/bin/docker-compose
-  chmod +x /usr/local/bin/docker-compose
   ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
   systemctl enable --now docker.service
 }
@@ -187,17 +185,17 @@ setup_atsign_user () {
     rm /etc/letsencrypt/*
     rmdir /etc/letsencrypt/
     ln -s /home/atsign/atsign/etc /etc/letsencrypt
-    tput setaf 9
+    tput setaf 7
   else
     tput setaf 1
     echo 'saved you from destroying letsencrypt by running the script again :-)'
-    tput setaf 9
+    tput setaf 7
   fi
 
   # make ~atsign directories
   tput setaf 2
   echo "Creating some base directories for atsign"
-  tput setaf 9
+  tput setaf 7
   for directory in $atsign_dirs; do
     mkdir_atsign "$directory"
   done
@@ -208,7 +206,6 @@ setup_atsign_user () {
   done
 
   chown atsign:atsign /home/atsign
-  
 }
 
 setup_docker () {
@@ -223,7 +220,7 @@ setup_docker () {
     if [[ $SECONDS -gt 120 ]]; then
       echo 'Error: Docker daemon is not starting...'
       echo 'Please check your docker installation before running again.'
-      exit 50
+      error_exit 50
     fi
   done
 
@@ -237,7 +234,7 @@ setup_docker () {
   STACK_RESULT=$?
   if [[ $STACK_RESULT -gt 0 ]]; then
     echo 'Error: Failed to deploy docker stack'
-    exit 52
+    error_exit 52
   fi
 }
 
@@ -260,7 +257,7 @@ get_dess_scripts () {
     DESS_SCRIPT_RESULT=$?
     if [[ $DESS_SCRIPT_RESULT -gt 0 ]]; then
       echo "Error: failed to install dess-$script"
-      exit 6
+      error_exit 6
     fi
     chmod 774 /usr/local/bin/dess-"$script"
     ln -s /usr/local/bin/dess-"$script" /usr/bin/dess-"$script"
@@ -269,7 +266,7 @@ get_dess_scripts () {
 
 post_install() {
   echo;
-  echo 'Dess installed, please move on to the dess-create command.'
+  echo 'Dess installed, please move on to the sudo dess-create command.'
 }
 
 do_install () {
@@ -278,7 +275,7 @@ do_install () {
   if [[ $EUID -ne 0 ]]; then
     echo 'Error: unable to perform root operations';
     echo 'Please run this script as root to complete installation.';
-    exit 1
+    error_exit 1
   fi
 
   install_dependencies
@@ -288,7 +285,7 @@ do_install () {
   setup_docker
   test_atsign_user
   get_dess_scripts
-  
+
   post_install
 }
 
