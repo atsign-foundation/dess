@@ -36,13 +36,13 @@ error_exit() {
     1)exit_msg="Not running with root priveleges";;
     2)exit_msg="Could not detect /etc/os-release ID";;
     4)exit_msg="certbot failed to install";;
-    50)exit_msg="docker daemon failed to start ( in time )";;
+    50)exit_msg="docker daemon failed to start in time";;
     51)exit_msg="docker-compose failed to install";;
     52)exit_msg="docker stack failed to deploy";;
     6)exit_msg="A dess script failed to install";;
     *);;
   esac
-  echo "$exit_msg"
+  echo "ERROR: $exit_msg"
   exit "$1"
 }
 
@@ -62,7 +62,6 @@ pre_install () {
 
   if [ -z "$os_release" ]
   then
-      echo 'Error: Could not detect your distribution.'
       error_exit 2
   fi
 
@@ -113,7 +112,6 @@ install_certbot () {
   echo y | $pkg_man -y install certbot
   CERTBOT_RESULT=$?
   if [[ $CERTBOT_RESULT -gt 0 ]]; then
-    echo 'Error: unable to install certbot'
     error_exit 4
   fi
 }
@@ -148,7 +146,6 @@ install_docker () {
     COMPOSE_RESULT=$?
     echo "$COMPOSE_RESULT"
     if [[ $COMPOSE_RESULT -gt 0 ]]; then
-      echo 'Error: unable to install docker compose'
       error_exit 51
     fi
     chown root:docker /usr/local/bin/docker-compose
@@ -218,8 +215,6 @@ setup_docker () {
     SECONDS=$SECONDS+1
     sleep 1
     if [[ $SECONDS -gt 120 ]]; then
-      echo 'Error: Docker daemon is not starting...'
-      echo 'Please check your docker installation before running again.'
       error_exit 50
     fi
   done
@@ -233,7 +228,6 @@ setup_docker () {
   docker stack deploy -c /home/atsign/base/shepherd.yaml secondaries
   STACK_RESULT=$?
   if [[ $STACK_RESULT -gt 0 ]]; then
-    echo 'Error: Failed to deploy docker stack'
     error_exit 52
   fi
 }
@@ -256,7 +250,6 @@ get_dess_scripts () {
     curl -fsSL "$repo_url"/"$script".sh -o /usr/local/bin/dess-"$script"
     DESS_SCRIPT_RESULT=$?
     if [[ $DESS_SCRIPT_RESULT -gt 0 ]]; then
-      echo "Error: failed to install dess-$script"
       error_exit 6
     fi
     chmod 774 /usr/local/bin/dess-"$script"
@@ -273,8 +266,6 @@ do_install () {
   pre_install
 
   if [[ $EUID -ne 0 ]]; then
-    echo 'Error: unable to perform root operations';
-    echo 'Please run this script as root to complete installation.';
     error_exit 1
   fi
 
