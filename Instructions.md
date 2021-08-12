@@ -1,4 +1,4 @@
-# Instructions v0.1.2
+# Instructions v0.1.2+1
 
 ## Preparation
 ### You will need
@@ -58,7 +58,7 @@ be generated:
   - Enter Domain and Port information then press `Activate`
 - On the dess machine
   - `sudo docker service scale [youratsign]_secondary=0`
-  - `sudo -u atsign rm -rf ~atsign/atsign/@sudokusufficient/*`
+  - `sudo -u atsign rm -rf ~atsign/atsign/@[youratsign]/*`
   - `sudo docker service scale [youratsign]_secondary=1`
   - `dess-reshowqr @[youratsign]`
 - Re-pair the @sign with a mobile app
@@ -69,6 +69,14 @@ be generated:
 It's possible to move a dess instance to another (virtual) machine.
 Just `tar` up the contents of /home/atsign and extract the archive
 onto a new machine with dess installed.
+
+The respective services can then be regenerated:
+
+```bash
+ATSIGN=@[youratsign]
+SERVICE=[youratsign]
+sudo docker stack deploy -c /home/atsign/dess/$ATSIGN/docker-compose.yaml $SERVICE
+```
 
 The /home/atsign directory contains the following subdirectories:
 
