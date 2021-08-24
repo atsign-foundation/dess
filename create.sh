@@ -12,6 +12,19 @@ export env PORT=$3
 export env EMAIL=$4
 export env SERVICE=$5
 
+error_exit() {
+  exit_msg=""
+  case "$1" in
+    1)exit_msg="Error: certbot failed to get a certificate.";;
+    2)exit_msg="Error: failed to pull the root CA file";;
+    3)exit_msg="Error: failed to setup the docker compose file";;
+    4)exit_msg="Error: failed to start the docker service for the secondary";;
+    *);;
+  esac
+  echo "ERROR: $exit_msg"
+  exit "$1"
+}
+
 # Let's make a secret whilst we are here !
 # hashalot should have been installed by now
 export env SECRET=$(head -30 /dev/urandom | openssl sha512 | awk -F'= ' '{print $2}')
@@ -121,34 +134,51 @@ change_sh 'root'
 # Make the directories in atsign
 $sh_c "mkdir -p /home/atsign/atsign/$ATSIGN/storage"
 
-#     $sh_c docker-compose --env-file ~atsign/dess/$ATSIGN/.env -f ~atsign/dess/$ATSIGN/docker-compose.yaml run  --service-ports cert
 $sh_c "/usr/bin/certbot certonly --standalone --domains $FQDN --non-interactive --agree-tos -m $EMAIL"
 CERTBOT_RESULT=$?
 if [[ $CERTBOT_RESULT -gt 0 ]]; then
-    echo 'Error: certbot failed to get a certificate.'
-    exit 1
+    error_exit 1
 fi
+
 # Last task to put in place the restart script and regenerate the ssl root CA file (as root)
 # Root CA
 $sh_c "curl -L -o  /home/atsign/atsign/etc/live/$FQDN/cacert.pem https://curl.se/ca/cacert.pem"
+CURL_RESULT=$?
+if [[ $CURL_RESULT -gt 0 ]]; then
+    error_exit 2
+fi
+
 # Put some ownership in place so atsign can read the certs
 $sh_c "chown -R atsign:atsign /home/atsign/atsign/$ATSIGN"
 $sh_c "chown -R atsign:atsign /home/atsign/atsign/etc/live/$FQDN"
 $sh_c "chown -R atsign:atsign /home/atsign/atsign/etc/archive/$FQDN"
 # Copy over restart script
 $sh_c "cp /home/atsign/base/restart.sh /home/atsign/atsign/etc/renewal-hooks/deploy"
-#
-#
+
 # We are now ready to start the secondary !
-    tput setaf 2
+tput setaf 2
+
 # It would be nice to use the @sign for the name but
 # Docker insists on a name that is DNS compliant and so emojis and @ signs are out hence the $SERVICE tag
 # we use a neat trick using docker-compose to create the compose file for us.
 change_sh 'atsign'
-    echo Starting secondary for "$ATSIGN" at "$FQDN" on port "$PORT" as "$DNAME" on Docker
+
+echo Starting secondary for "$ATSIGN" at "$FQDN" on port "$PORT" as "$DNAME" on Docker
+
 $sh_c "export TMPDIR=/home/atsign/tmp; /usr/bin/docker-compose --env-file /home/atsign/dess/$ATSIGN/.env -f /home/atsign/dess/$ATSIGN/docker-swarm.yaml config | tee /home/atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null;"
+COMPOSE_RESULT=$?
+if [[ $COMPOSE_RESULT -gt 0 ]]; then
+    error_exit 3
+fi
+
 $sh_c "/usr/bin/docker stack deploy -c /home/atsign/dess/$ATSIGN/docker-compose.yaml $SERVICE"
-    echo Your QR-Code for "$ATSIGN"
-    tput setaf 7
+DOCKER_RESULT=$?
+if [[ $DOCKER_RESULT -gt 0 ]]; then
+    error_exit 4
+fi
+
+echo Your QR-Code for "$ATSIGN"
+tput setaf 7
+
 qrencode -t ANSIUTF8 "${ATSIGN}:${SECRET}"
 
