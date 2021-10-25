@@ -2,6 +2,8 @@
 
 ### Now for a little internet optimism
 
+[![GitHub License](https://img.shields.io/badge/license-BSD3-blue.svg)](./LICENSE)
+
 # README
 
 Distributed Edge Secondary Server (dess)
@@ -11,7 +13,7 @@ centralized what you must" as a design philosophhy. Each @sign has it's own
 microservice and that microservice can run anywhere as long as it is directly
 addressable on the internet. By this we mean it has a dedicated DNS address
 and port number, also required is an SSL certificate to allow TLS encrypted
-communications. 
+communications.
 
 This means that by design you can run your own secondary server or have someone
 you trust to run it reliably run it for you. Why would you do that? Well
