@@ -6,8 +6,8 @@
 
 Distributed Edge Secondary Server (dess)
 
-The @protocol was written and developed with "distribute what you can and
-centralized what you must" as a design philosophhy. Each @sign has it's own
+The atProtocol was written and developed with "distribute what you can and
+centralized what you must" as a design philosophhy. Each Atsign has it's own
 microservice and that microservice can run anywhere as long as it is directly
 addressable on the internet. By this we mean it has a dedicated DNS address
 and port number, also required is an SSL certificate to allow TLS encrypted
@@ -16,7 +16,7 @@ communications.
 This means that by design you can run your own secondary server or have someone
 you trust to run it reliably run it for you. Why would you do that? Well
 perhaps you like to have the control, or your requirements need more
-infrastructure than The @ Company provide on their secondary infrastructure.
+infrastructure than Atsign provide on their secondary infrastructure.
 
 Whatever the use case we want to make it easy for you run your own Secondary.
 
@@ -33,7 +33,7 @@ If you have set up NAT before then you will have no issues, if not it's
 worth understanding how you can provide the internet connectivity required
 in your environment before proceeding.
 
-Finally you will need an @sign and you can get a free one or a custom one
+Finally you will need an Atsign and you can get a free one or a custom one
 at [atsign.com](https://atsign.com)
 
 ### Contributor
@@ -62,7 +62,7 @@ certificates using LetsEncrypt. The secondary will be configured and started
 up as a Docker swarm service. That service will auto update when new software
 is pushed. Certificates will be renewed automatically, and crashes or other
 issues will be handled gracefully. The software your secondary uses will be
-the exact same image as The @ Company is using in production.
+the exact same image as Atsign is using in production.
 
 [Instructions.md](Instructions.md) contains detailed instructions on how to
 install dess and create a secondary server using it.
