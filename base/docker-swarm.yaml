@@ -10,7 +10,7 @@ services:
     volumes:
       - ~/atsign/etc/live/${DOMAIN}:/atsign/certs
       - ~/atsign/etc/archive/${DOMAIN}:/archive/${DOMAIN}
-      - ~/atsign/${ATSIGN}:/atsign/storage
+      - ~/atsign/${ATSIGN}/storage:/atsign/storage
     networks:
       second: {}
 
