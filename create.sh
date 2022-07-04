@@ -165,7 +165,7 @@ change_sh 'atsign'
 
 echo Starting secondary for "$ATSIGN" at "$FQDN" on port "$PORT" as "$DNAME" on Docker
 
-$sh_c "export TMPDIR=/home/atsign/tmp; /usr/bin/docker-compose --env-file /home/atsign/dess/$ATSIGN/.env -f /home/atsign/dess/$ATSIGN/docker-swarm.yaml config | tee /home/atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null;"
+$sh_c "export HOME=/home/atsign; export TMPDIR=$HOME/tmp; /usr/bin/docker-compose --env-file /home/atsign/dess/$ATSIGN/.env -f /home/atsign/dess/$ATSIGN/docker-swarm.yaml config | tee /home/atsign/dess/$ATSIGN/docker-compose.yaml > /dev/null;"
 COMPOSE_RESULT=$?
 if [[ $COMPOSE_RESULT -gt 0 ]]; then
     error_exit 3
