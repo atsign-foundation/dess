@@ -7,7 +7,7 @@
 Distributed Edge Secondary Server (dess)
 
 The atProtocol was written and developed with "distribute what you can and
-centralized what you must" as a design philosophy. Each atSign has it's own
+centralized what you must" as a design philosophy. Each atSign has its own
 microservice and that microservice can run anywhere as long as it is directly
 addressable on the internet. By this we mean it has a dedicated DNS address
 and port number, also required is an SSL certificate to allow TLS encrypted
