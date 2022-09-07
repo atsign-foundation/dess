@@ -7,7 +7,7 @@
 Distributed Edge Secondary Server (dess)
 
 The atProtocol was written and developed with "distribute what you can and
-centralized what you must" as a design philosophhy. Each Atsign has it's own
+centralized what you must" as a design philosophy. Each atSign has it's own
 microservice and that microservice can run anywhere as long as it is directly
 addressable on the internet. By this we mean it has a dedicated DNS address
 and port number, also required is an SSL certificate to allow TLS encrypted
@@ -33,7 +33,7 @@ If you have set up NAT before then you will have no issues, if not it's
 worth understanding how you can provide the internet connectivity required
 in your environment before proceeding.
 
-Finally you will need an Atsign and you can get a free one or a custom one
+Finally you will need an atSign and you can get a free one or a custom one
 at [atsign.com](https://atsign.com)
 
 ### Contributor
