@@ -27,11 +27,11 @@ specific version of docker. Hints are in the scripts on how to do this.
   ```
   sudo apt install curl
   ```
-- Install the software and follow the prompts to install the atsign user
+- Install the software and follow the prompts to install the atSign user
   ```
   curl -fsSL https://getdess.atsign.com | sudo bash
   ```
-- Create a atServer, using the dess-create script and follow the instructions
+- Create an atServer, using the dess-create script and follow the instructions
   ```
   sudo dess-create
   ```
@@ -46,7 +46,7 @@ your atSign DNS and port number
 
 ## If you want to start over
 
-To completely delete the data from a atServer so that a new set of keys will
+To completely delete the data from ab atServer so that a new set of keys will
 be generated:
 
 - Go to the [atsign.com registrar](https://my.atsign.com) and:
