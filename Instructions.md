@@ -41,12 +41,12 @@ specific version of docker. Hints are in the scripts on how to do this.
   ```
 - Sign in to the [atsign.com registrar](https://my.atsign.com) and update
 your atSign DNS and port number
-- Fire up an @ app like @buzz or @wavi and pair your device to your atServer
+- Fire up an  atApp like atBuzz or atWavi and pair your device to your atServer
 - You are done !
 
 ## If you want to start over
 
-To completely delete the data from ab atServer so that a new set of keys will
+To completely delete the data from an atServer so that a new set of keys will
 be generated:
 
 - Go to the [atsign.com registrar](https://my.atsign.com) and:
