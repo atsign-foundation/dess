@@ -10,7 +10,7 @@
 - A free port number that is accessible from the internet to your machine 
 (1024-65535)
 - An email address so you can get the SSL Certificate from LetsEncrypt.com
-- An @sign from atsign.com
+- An atSign from atsign.com
 
 ### Assumption
 - We assume the machine we are installing on has no other software installed.
@@ -31,37 +31,37 @@ specific version of docker. Hints are in the scripts on how to do this.
   ```
   curl -fsSL https://getdess.atsign.com | sudo bash
   ```
-- Create a secondary, using the dess-create script and follow the instructions
+- Create a atServer, using the dess-create script and follow the instructions
   ```
   sudo dess-create
   ```
-- If you need to see the QR code again for an @sign then run:
+- If you need to see the QR code again for an atSign then run:
   ```
   dess-reshowqr @youratsign
   ```
 - Sign in to the [atsign.com registrar](https://my.atsign.com) and update
-your @sign DNS and port number
-- Fire up an @ app like @buzz or @wavi and pair your device to your secondary
+your atSign DNS and port number
+- Fire up an @ app like @buzz or @wavi and pair your device to your atServer
 - You are done !
 
 ## If you want to start over
 
-To completely delete the data from a secondary so that a new set of keys will
+To completely delete the data from a atServer so that a new set of keys will
 be generated:
 
 - Go to the [atsign.com registrar](https://my.atsign.com) and:
-  - Select `My @signs`
-  - Click on the @sign you'd like to reset then press the `Manage` button
+  - Select `My atSigns`
+  - Click on the atSign you'd like to reset then press the `Manage` button
   - Select `Reset`
-  - Confirm the @sign and press `Yes, delete all data`
+  - Confirm the atSign and press `Yes, delete all data`
   - Click on `Manage` again then `Advanced Settings`
   - Enter Domain and Port information then press `Activate`
 - On the dess machine
-  - `sudo docker service scale [youratsign]_secondary=0`
+  - `sudo docker service scale [youratsign]_atServer=0`
   - `sudo -u atsign rm -rf ~atsign/atsign/@[youratsign]/*`
-  - `sudo docker service scale [youratsign]_secondary=1`
+  - `sudo docker service scale [youratsign]_atServer=1`
   - `dess-reshowqr @[youratsign]`
-- Re-pair the @sign with a mobile app
+- Re-pair the atSign with a mobile app
   - You may need to reset the atsign on the app first
 
 ## Moving a dess instance
@@ -90,15 +90,15 @@ seondary images up to date
 
 ### dess
 
-Holds customised @sign directories that contain:
+Holds customised atSign directories that contain:
 
 - `.env` takes input from `create-dess` script for use as environment variables
-- `docker-compose.yaml` customised Docker swarm config for secondary
+- `docker-compose.yaml` customised Docker swarm config for atServer
 - `docker-swarm.yaml` Docker swarm template configuration
 
-### atsign
+### atSign
 
 - `etc` Used for LetsEncrypt certificates
 
-Also holds customised @sign directories that contain logs, and persistence for
+Also holds customised atSign directories that contain logs, and persistence for
 the hive datastore.
