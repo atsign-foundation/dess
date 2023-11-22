@@ -140,7 +140,9 @@ install_docker () {
           amzn) $pkg_man install -y libffi libffi-devel openssl-devel python3 python3-pip python3-devel gcc;;
           *) $pkg_man install -y python3 python3-pip;;
         esac;
-        pip3 install docker-compose;
+        python3 -m venv .venv;
+        source .venv/bin/activate;
+        python3 -m pip install -r docker-compose
       ;;
     esac
     COMPOSE_RESULT=$?
