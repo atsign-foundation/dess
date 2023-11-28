@@ -1,0 +1,25 @@
+name: shellcheck
+# Runs the workflow on the below events:
+# 1. on pull request raised to trunk branch.
+# 2. on push event to trunk branch.
+on:
+  push:
+    branches:
+      - trunk
+  pull_request:
+    branches:
+      - trunk
+
+permissions:  # added using https://github.com/step-security/secure-workflows
+  contents: read
+
+jobs:
+  shellcheck:
+    name: Shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@cd81f4475ab741e097ec0fe73b692f3e49d66b8c # v2.0.0
+        env:
+          SHELLCHECK_OPTS: -e SC1090 -e SC1091

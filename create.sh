@@ -26,8 +26,8 @@ error_exit() {
 }
 
 # Let's make a secret whilst we are here !
-# hashalot should have been installed by now
-export env SECRET=$(head -30 /dev/urandom | openssl sha512 | awk -F'= ' '{print $2}')
+SECRET=$(head -30 /dev/urandom | openssl sha512 | awk -F'= ' '{print $2}')
+export env SECRET
 
 # Check that we have an @ in the @sign
 if [[ ! $ATSIGN  =~ ^@.*$ ]]
