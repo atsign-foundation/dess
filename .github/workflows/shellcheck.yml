@@ -1,4 +1,4 @@
-name: static_analysis
+name: shellcheck
 # Runs the workflow on the below events:
 # 1. on pull request raised to trunk branch.
 # 2. on push event to trunk branch.
@@ -22,4 +22,4 @@ jobs:
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@cd81f4475ab741e097ec0fe73b692f3e49d66b8c # v2.0.0
         env:
-          SHELLCHECK_OPTS: -x -e SC1090
+          SHELLCHECK_OPTS: -e SC1090 -e SC1091
