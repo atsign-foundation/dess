@@ -6,11 +6,11 @@ if [[ $# -eq 0 || $# -gt 5 ]] ; then
     exit 0
 fi
 
-export env ATSIGN=$1
-export env FQDN=$2
-export env PORT=$3
-export env EMAIL=$4
-export env SERVICE=$5
+export ATSIGN=$1
+export FQDN=$2
+export PORT=$3
+export EMAIL=$4
+export SERVICE=$5
 
 error_exit() {
   exit_msg=""
@@ -27,7 +27,7 @@ error_exit() {
 
 # Let's make a secret whilst we are here !
 SECRET=$(head -30 /dev/urandom | openssl sha512 | awk -F'= ' '{print $2}')
-export env SECRET
+export SECRET
 
 # Check that we have an @ in the @sign
 if [[ ! $ATSIGN  =~ ^@.*$ ]]
