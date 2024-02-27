@@ -127,7 +127,23 @@ install_docker () {
         dnf -y install docker-ce docker-ce-cli containerd.io;
         systemctl enable --now docker.service;
       ;;
-      *) curl -fsSL https://get.docker.com | sh;;
+      *) 
+      # Add Docker's official GPG key:
+      sudo apt-get update
+      sudo apt-get install ca-certificates curl gnupg
+      sudo install -m 0755 -d /etc/apt/keyrings
+      curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+      sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+      # Add the repository to Apt sources:
+      # Need to add conditional for derivative distros
+      echo \
+        "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+        "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+        sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+      sudo apt-get update
+      sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+      ;;
     esac
   fi
 
@@ -140,7 +156,13 @@ install_docker () {
           amzn) $pkg_man install -y libffi libffi-devel openssl-devel python3 python3-pip python3-devel gcc;;
           *) $pkg_man install -y python3 python3-pip;;
         esac;
-        pip3 install docker-compose;
+        # Setting up docker-compose in a virtualenv
+        python3 -m venv .venv;
+        source .venv/bin/activate;
+        compose_version=$(curl https://api.github.com/repos/docker/compose/releases/latest | jq .name -r)
+        output='/usr/local/bin/docker-compose'
+        curl -L https://github.com/docker/compose/releases/download/$compose_version/docker-compose-$(uname -s)-$(uname -m) -o $output
+        chmod +x $output
       ;;
     esac
     COMPOSE_RESULT=$?
