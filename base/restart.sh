@@ -12,7 +12,7 @@ step ca certificate -f "${RENEWED_DOMAINS}" "${MTLSFC}" "${MTLSPK}"
 # Touch the restart file to notify the atServer that it has a new TLS
 # certificate to install. It will do this when it has time and is not
 # busy with other work.
-touch ~atsign/atsign/etc/live/"$RENEWED_DOMAINS"/restart
+touch "${LIVEDIR}/restart"
 # Get the ownership correct for atsign
 chown -R atsign:atsign "${LIVEDIR}"
 chown -R atsign:atsign "${ARCHIVEDIR}"
