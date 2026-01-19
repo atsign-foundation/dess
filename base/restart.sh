@@ -4,8 +4,6 @@ LIVEDIR="/home/atsign/atsign/etc/live/${RENEWED_DOMAINS}"
 MTLSFC="${LIVEDIR}/mtls/fullchain.pem"
 MTLSPK="${LIVEDIR}/mtls/privkey.pem"
 ARCHIVEDIR="/home/atsign/atsign/etc/archive/${RENEWED_DOMAINS}"
-ATCASBASE="https://raw.githubusercontent.com/atsign-foundation/at_server/trunk"
-ATCASFILE="/packages/at_secondary_server/cacert/cacert.pem"
 # Get new mTLS certs
 mkdir -p "${LIVEDIR}/mtls"
 step ca certificate -f "${RENEWED_DOMAINS}" "${MTLSFC}" "${MTLSPK}"
